@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option java_package = "ca.wise.grid.proto";
+option csharp_namespace = "WISE.GridProto";
+option java_multiple_files = true;
+
+import "math.proto";
+import "wcsData.proto";
+import "google/protobuf/wrappers.proto";
+
+package WISE.GridProto;
+
+
+message CwfgmGrid {
+    int32 version = 1;
+
+    google.protobuf.UInt32Value xSize = 2;
+    google.protobuf.UInt32Value ySize = 3;
+    Math.Double xLLCorner = 4;
+    Math.Double yLLCorner = 5;
+    Math.Double resolution = 6;
+
+    Math.Coordinate llLocation = 7;
+
+    Math.Double nodataElevation = 8;
+
+    FuelMapFile fuelMap = 9;
+    ElevationFile elevation = 10;
+
+    ProjectionFile projection = 11;
+
+    message ElevationFile {
+        wcsData contents = 1;
+        google.protobuf.StringValue filename = 2;
+    }
+
+    message FuelMapFile {
+        wcsData contents = 1;
+        google.protobuf.StringValue header = 2;
+        google.protobuf.StringValue filename = 3;
+    }
+
+    message ProjectionFile {
+        google.protobuf.StringValue contents = 1;
+        google.protobuf.StringValue wkt = 2;
+        google.protobuf.StringValue units = 3;
+        google.protobuf.StringValue filename = 4;
+    }
+}

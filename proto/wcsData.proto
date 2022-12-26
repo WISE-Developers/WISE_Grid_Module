@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option java_package = "ca.wise.grid.proto";
+option java_outer_classname = "wcsDataPackage";
+option csharp_namespace = "WISE.GridProto";
+option java_multiple_files = true;
+
+import "google/protobuf/wrappers.proto";
+
+package WISE.GridProto;
+
+
+message wcsData {
+    reserved "gis";
+    reserved 3;
+
+    int32 version = 1;
+
+    oneof data {
+        locationFile file = 2;
+    }
+
+    uint32 xSize = 4;
+    uint32 ySize = 5;
+
+    binaryData binary = 6;
+
+    message locationFile {
+        int32 version = 1;
+        string filename = 2;
+        google.protobuf.StringValue projectionFilename = 3;
+    }
+
+    message binaryData {
+        bytes data = 1;
+        bytes dataValid = 2;
+        google.protobuf.BoolValue isZipped = 3;
+    }
+}

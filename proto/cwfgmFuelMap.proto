@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_package = "ca.wise.grid.proto";
+option csharp_namespace = "WISE.GridProto";
+option java_multiple_files = true;
+
+import "ccwfgmFuel.proto";
+import "google/protobuf/wrappers.proto";
+
+package WISE.GridProto;
+
+
+message CwfgmFuelMap {
+    int32 version = 1;
+
+    repeated CwfgmFuelData data = 2;
+
+    message CwfgmFuelData {
+        int32 index = 1;
+        int32 exportIndex = 2;
+
+        oneof fuel {
+            google.protobuf.Int32Value fuelIndex = 3;
+            WISE.FuelProto.CcwfgmFuel fuelData = 4;
+        }
+    }
+
+    optional bool importedLut = 3;
+    optional string lutFilename = 4;
+    optional bool showUnused = 5;
+}

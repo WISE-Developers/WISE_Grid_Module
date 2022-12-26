@@ -1,0 +1,247 @@
+syntax = "proto3";
+
+option java_package = "ca.wise.grid.proto";
+option csharp_namespace = "WISE.GridProto";
+option java_multiple_files = true;
+
+import "math.proto";
+import "wtime.proto";
+import "geography.proto";
+import "google/protobuf/wrappers.proto";
+
+package WISE.GridProto;
+
+
+message CwfgmAttributeFilter {
+    int32 version = 1;
+
+    oneof data {
+        File file = 2;
+        BinaryData binary = 3;
+    }
+
+    optional string name = 4;	        // not really optional but need to be able to suppress it in the old file format
+    optional string comments = 5;
+//    optional uint32 color = 6;        // these 3 existed in the deprecated class but not used (loaded or saved) so not making them present here (for now)
+//    optional uint64 size = 7;
+//    bool landscape = 8;
+
+    /* just use DataKey below
+    AttributeType type = 9;
+    enum AttributeType {
+        FUEL_GRID = 0;
+        DEGREE_CURING = 1;
+        GREENUP = 2;
+        PERCENT_CONIFER = 3;
+        PERCENT_DEAD_FIR = 4;
+        CROWN_BASE_HEIGHT = 5;
+        TREE_HEIGHT = 6;
+        FUEL_LOAD = 7;
+        FBP_VECTOR = 8;
+    }
+    */
+    message File {
+        string filename = 1;
+        string projection = 2;
+        DataKey datakey = 3;
+    }
+
+    message BinaryData {
+        uint32 xSize = 1;
+        uint32 ySize = 2;
+        google.protobuf.UInt32Value key = 3 [deprecated = true];
+        Type type = 4;
+        google.protobuf.BytesValue data = 5;
+        google.protobuf.BytesValue nodata = 6;
+        Math.Double xLLCorner = 7;
+        Math.Double yLLCorner = 8;
+        Math.Double resolution = 9;
+        google.protobuf.BoolValue isZipped = 10;
+        DataKey datakey = 11;
+    }
+
+    enum Type {
+        EMPTY = 0;
+        BOOL = 1;
+        CHAR = 2;
+        SHORT = 3;
+        INTEGER = 4;
+        LONG = 5;
+        UNSIGNED_CHAR = 6;
+        UNSIGNED_SHORT = 7;
+        UNSIGNED_INTEGER = 8;
+        UNSIGNED_LONG = 9;
+        FLOAT = 10;
+        LONG_FLOAT = 11;
+    }
+
+    enum DataKey {
+        DK_EMPTY = 0;
+        GREENUP = 4;
+        PC = 15609;
+        PDF = 15610;
+        CURINGDEGREE = 15611;
+        CBH = 15606;
+        TREEHEIGHT = 15608;
+        FUELLOAD = 15623;
+        FBP_OVD = 2101;
+        FUEL = 65535;
+    }
+}
+
+message CwfgmReplaceGridFilterBase {
+    int32 version = 1;
+
+    oneof toFuel {
+        int32 toFuelIndex = 2;
+        string toFuelName = 3;
+    }
+
+    oneof fromFuel {
+        int32 fromFuelIndex = 4;
+        string fromFuelName = 5;
+        FromFuelRule fromFuelRule = 6;
+    }
+
+    enum FromFuelRule {
+        NODATA = 0;
+        ALL_FUELS = 1;
+        ALL_COMBUSTIBLE_FUELS = 2;
+    }
+}
+
+message CwfgmReplaceGridFilter {
+    int32 version = 1;
+    
+    Geography.GeoPoint pointOne = 2;
+    Geography.GeoPoint pointTwo = 3;
+    
+    Math.Double xLLCorner = 4;
+    Math.Double yLLCorner = 5;
+    Math.Double resolution = 6;
+
+    google.protobuf.BoolValue landscape = 7;
+
+    optional string name = 8;	// not really optional but need to be able to suppress it in the old file format
+    optional string comments = 9;
+
+    CwfgmReplaceGridFilterBase filter = 10;
+}
+
+message CwfgmPolyReplaceGridFilter {
+    int32 version = 1;
+
+    oneof shape {
+    Geography.GeoPoly polygons = 2;
+        string filename = 3;
+    }
+
+    optional string name = 4;	// not really optional but need to be able to suppress it in the old file format
+    optional string comments = 5;
+    optional uint32 color = 6;
+    optional uint64 size = 7;
+
+    CwfgmReplaceGridFilterBase filter = 8;
+}
+
+message CwfgmVectorFilter {
+    int32 version = 1;
+
+    Math.Double fireBreakWidth = 2;
+
+    oneof data {
+    Geography.GeoPoly polygons = 3;
+        string filename = 4;
+    }
+
+    optional string name = 5;	        // not really optional but need to be able to suppress it in the old file format
+    optional string comments = 6;
+    optional uint32 color = 7;
+    optional uint32 fillColor = 8;
+    optional uint64 symbol = 9;
+    optional sint32 width = 10;
+    optional bool imported = 11;
+}
+
+message CwfgmAsset {
+    int32 version = 1;
+
+    Math.Double assetBoundary = 2;
+
+    oneof data {
+    Geography.GeoPoly assets = 3;
+        string filename = 4;
+    }
+
+    optional string name = 5;	        // not really optional but need to be able to suppress it in the old file format
+    optional string comments = 6;
+    optional uint32 color = 7;
+    optional uint32 fillColor = 8;
+    optional uint64 symbol = 9;
+    optional sint32 width = 10;
+    optional bool imported = 11;
+}
+
+message CwfgmTarget {
+    int32 version = 1;
+
+    oneof data {
+    Geography.GeoPoly targets = 2;
+        string filename = 3;
+    }
+
+    optional string name = 4;	        // not really optional but need to be able to suppress it in the old file format
+    optional string comments = 5;
+    optional uint32 color = 6;
+    optional uint64 symbol = 7;
+    optional sint32 displaySize = 8;
+    optional bool imported = 9;
+}
+
+message TemporalCondition {
+    int32 version = 1;
+
+    repeated DailyAttribute daily = 2;
+    repeated SeasonalAttribute seasonal = 3;
+
+    message DailyAttribute {
+        int32 version = 1;
+
+        HSS.Times.WTime localStartTime = 2;
+        HSS.Times.WTimeSpan startTime = 3;
+        HSS.Times.WTimeSpan endTime = 4;
+        Math.Double minRh = 5;              // stored as a decimal, between 0 and 1
+        Math.Double maxWs = 6;              // 0 to 200kph is acceptable
+        Math.Double minFwi = 7;             // must be >= 0
+        Math.Double minIsi = 8;             // must be >= 0
+
+		enum TimeRelative {
+			LOCAL_MIDNIGHT = 0;             // default (including when not specified)
+			LOCAL_NOON = 1;                 // same as LOCAL_MIDNIGHT but adjusted by 12 hours
+			SUN_RISE_SET = 2;               // calcualte sun rise or set, and adjust accordingly - will be dependent on location
+		}
+
+        optional TimeRelative localStartTimeRelative = 9;
+        optional TimeRelative localEndTimeRelative = 10;
+    }
+
+    message SeasonalAttribute {
+        int32 version = 1;
+
+        HSS.Times.WTimeSpan localStartTime = 2;
+
+		repeated EffectiveAttribute attributes = 3;
+
+		message EffectiveAttribute {
+			Type type = 1;
+			bool active = 2;
+			Math.Double value = 3;
+
+			enum Type {
+				CURING_DEGREE = 0;      // stored as a percentage, between 0 and 100
+				GRASS_PHENOLOGY = 1;
+				GREENUP = 2;
+			}
+		}
+    }
+}
