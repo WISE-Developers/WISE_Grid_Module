@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ca.wise</groupId>
-  <artifactId>Grid</artifactId>
+  <artifactId>grid</artifactId>
   <version>@PROMETHEUS_VERSION@</version>
   <packaging>jar</packaging>
   <name>Grid</name>
@@ -82,12 +82,12 @@
     </dependency>
     <dependency>
       <groupId>ca.hss.times</groupId>
-      <artifactId>WTime</artifactId>
+      <artifactId>wtime</artifactId>
       <version>@WTIME_VERSION@</version>
     </dependency>
     <dependency>
       <groupId>ca.wise</groupId>
-      <artifactId>Fuel</artifactId>
+      <artifactId>fuel</artifactId>
       <version>@PROMETHEUS_VERSION@</version>
     </dependency>
   </dependencies>
