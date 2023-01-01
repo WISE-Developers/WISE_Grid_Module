@@ -30,7 +30,7 @@
 #include <float.h>
 #include <stdio.h>
 
-#include "propsysreplacement.cpp"
+#include "propsysreplacement.h"
 
 #ifdef DEBUG
 #include <assert.h>
