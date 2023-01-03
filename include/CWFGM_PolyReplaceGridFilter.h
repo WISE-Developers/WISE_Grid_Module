@@ -337,8 +337,8 @@ protected:
 
 	std::uint16_t convertX(double x, XY_Rectangle *bbox);
 	std::uint16_t convertY(double y, XY_Rectangle *bbox);
-	__INLINE double invertX(double x)			{ return x * m_resolution + m_xllcorner; }
-	__INLINE double invertY(double y)			{ return y * m_resolution + m_yllcorner; }
+	double invertX(double x)			{ return x * m_resolution + m_xllcorner; }
+	double invertY(double y)			{ return y * m_resolution + m_yllcorner; }
 
 	void calculateReplaceArray();
 	void clearReplaceArray();

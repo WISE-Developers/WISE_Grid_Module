@@ -49,8 +49,8 @@ class LayerInfo : public MinNode {
 
 	LayerInfo()						{ cnt = 0; };
 
-	__INLINE LayerInfo *LN_Succ()	{ return (LayerInfo *)MinNode::LN_Succ(); };
-	__INLINE LayerInfo *LN_Pred()	{ return (LayerInfo *)MinNode::LN_Pred(); };
+	LayerInfo *LN_Succ()	{ return (LayerInfo *)MinNode::LN_Succ(); };
+	LayerInfo *LN_Pred()	{ return (LayerInfo *)MinNode::LN_Pred(); };
 };
 
 
