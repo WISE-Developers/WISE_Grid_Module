@@ -125,7 +125,7 @@ HRESULT CCWFGM_LayerManager::PutGridEngine(Layer * layerThread, const ICWFGM_Gri
 		engine = dynamic_cast<ICWFGM_GridEngine *>(const_cast<ICWFGM_GridEngine *>(theengine));
 		if (engine == nullptr) {
 			HRESULT retval = E_FAIL;
-			weak_assert(0);
+			weak_assert(false);
 			return retval;
 		}
 	}
@@ -142,7 +142,7 @@ HRESULT CCWFGM_LayerManager::PutGridEngine(Layer * layerThread, const ICWFGM_Gri
 		
 		li = new LayerInfo();
 		if (!li) {
-			weak_assert(0);
+			weak_assert(false);
 			return E_OUTOFMEMORY;
 		}
 		li->_this = const_cast<ICWFGM_GridEngine *>(key);
@@ -156,7 +156,7 @@ HRESULT CCWFGM_LayerManager::PutGridEngine(Layer * layerThread, const ICWFGM_Gri
 			if (key == li->_this) {
 				weak_assert(li->cnt == 0);
 				if (li->cnt != 0) {
-					weak_assert(0);
+					weak_assert(false);
 					return ERROR_STATE_OBJECT_LOCKED;
 				}
 				layer->m_list.Remove(li);

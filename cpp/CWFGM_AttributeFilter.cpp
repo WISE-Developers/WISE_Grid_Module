@@ -117,7 +117,7 @@ HRESULT CCWFGM_AttributeFilter::get_FuelMap(CCWFGM_FuelMap **pVal) {
 
 	*pVal = m_fuelMap.get();
 	if (!m_fuelMap) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_GRID_UNINITIALIZED;
 	}
 	return S_OK;
@@ -156,7 +156,7 @@ HRESULT CCWFGM_AttributeFilter::SetAttributePoint(const XY_Point &pt, const Nume
 
 	std::uint16_t x = convertX(pt.x, nullptr);
 	std::uint16_t y = convertY(pt.y, nullptr);
-	if (!m_gridEngine(nullptr))					{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_gridEngine(nullptr))					{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (x >= m_xsize)							return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (y >= m_ysize)							return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (!m_array_i1)							return ERROR_SEVERITY_WARNING;
@@ -281,7 +281,7 @@ HRESULT CCWFGM_AttributeFilter::SetAttributeLine(XY_Point pt1,XY_Point pt2, cons
 
 	std::uint16_t x1 = convertX(pt1.x, nullptr); std::uint16_t y1 = convertY(pt1.y, nullptr);
 	std::uint16_t x2 = convertX(pt2.x, nullptr); std::uint16_t y2 = convertY(pt2.y, nullptr);
-	if (!m_gridEngine(nullptr))					{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_gridEngine(nullptr))					{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (x1 >= m_xsize)							return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (y1 >= m_ysize)							return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (x2 >= m_xsize)							return ERROR_GRID_LOCATION_OUT_OF_RANGE;
@@ -306,7 +306,7 @@ HRESULT CCWFGM_AttributeFilter::GetAttributePoint(const XY_Point &pt, NumericVar
 
 	std::uint16_t x = convertX(pt.x, nullptr);
 	std::uint16_t y = convertY(pt.y, nullptr);
-	if (!m_gridEngine(nullptr))					{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_gridEngine(nullptr))					{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (x >= m_xsize)							return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (y >= m_ysize)							return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (!m_array_i1)							return ERROR_SEVERITY_WARNING;
@@ -357,7 +357,7 @@ HRESULT CCWFGM_AttributeFilter::ResetAttribute(const NumericVariant &value) {
 
 	bool hr;
 	boost::intrusive_ptr<ICWFGM_GridEngine> ge;
-	if (!(ge = m_gridEngine(nullptr)))			{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!(ge = m_gridEngine(nullptr)))			{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	std::uint32_t size;
 	union {
@@ -440,7 +440,7 @@ HRESULT CCWFGM_AttributeFilter::ResetAttribute(const NumericVariant &value) {
 
 HRESULT CCWFGM_AttributeFilter::MT_Lock(Layer *layerThread, bool exclusive, std::uint16_t obtain) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)	{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)	{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	HRESULT hr;
 	if (obtain == (std::uint16_t)-1) {
@@ -475,14 +475,14 @@ HRESULT CCWFGM_AttributeFilter::GetFuelData(Layer *layerThread, const XY_Point &
 	if (!fuel)									return E_POINTER;
 	if (!fuel_valid)							return E_POINTER;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (m_optionKey == (std::uint16_t)-1) {
 		std::uint16_t x = convertX(pt.x, cache_bbox);
 		std::uint16_t y = convertY(pt.y, cache_bbox);
-		if (!m_fuelMap)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (m_xsize == (std::uint16_t)-1)		{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (!m_array_ui1)						{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (m_optionType != VT_UI1)				{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+		if (!m_fuelMap)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (m_xsize == (std::uint16_t)-1)		{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (!m_array_ui1)						{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (m_optionType != VT_UI1)				{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 		if (x >= m_xsize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 		if (y >= m_ysize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 
@@ -504,14 +504,14 @@ HRESULT CCWFGM_AttributeFilter::GetFuelIndexData(Layer *layerThread, const XY_Po
 	if (!fuel_index)							return E_POINTER;
 	if (!fuel_valid)							return E_POINTER;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (m_optionKey == (std::uint16_t)-1) {
 		std::uint16_t x = convertX(pt.x, cache_bbox);
 		std::uint16_t y = convertY(pt.y, cache_bbox);
-		if (!m_fuelMap)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (m_xsize == (std::uint16_t)-1)		{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (!m_array_ui1)						{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (m_optionType != VT_UI1)				{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+		if (!m_fuelMap)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (m_xsize == (std::uint16_t)-1)		{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (!m_array_ui1)						{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (m_optionType != VT_UI1)				{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 		if (x >= m_xsize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 		if (y >= m_ysize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 
@@ -534,12 +534,12 @@ HRESULT CCWFGM_AttributeFilter::GetFuelDataArray(Layer *layerThread, const XY_Po
 	std::uint16_t x_min = convertX(min_pt.x, nullptr), y_min = convertY(min_pt.y, nullptr);
 	std::uint16_t x_max = convertX(max_pt.x, nullptr), y_max = convertY(max_pt.y, nullptr);
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (m_optionKey == (std::uint16_t)-1) {
-		if (!m_fuelMap)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (m_xsize == (std::uint16_t)-1)		{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (!m_array_ui1)						{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (m_optionType != VT_UI1)				{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+		if (!m_fuelMap)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (m_xsize == (std::uint16_t)-1)		{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (!m_array_ui1)						{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (m_optionType != VT_UI1)				{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 		if (x_min >= m_xsize)					return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 		if (y_min >= m_ysize)					return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 		if (x_max >= m_xsize)					return ERROR_GRID_LOCATION_OUT_OF_RANGE;
@@ -616,14 +616,14 @@ HRESULT CCWFGM_AttributeFilter::GetFuelIndexDataArray(Layer *layerThread, const 
     const HSS_Time::WTime &time, uint8_t_2d *fuel, bool_2d *fuel_valid) {
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (m_optionKey == (std::uint16_t)-1) {
 		std::uint16_t x_min = convertX(min_pt.x, nullptr), y_min = convertY(min_pt.y, nullptr);
 		std::uint16_t x_max = convertX(max_pt.x, nullptr), y_max = convertY(max_pt.y, nullptr);
-		if (!m_fuelMap)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (m_xsize == (std::uint16_t)-1)		{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (!m_array_ui1)						{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-		if (m_optionType != VT_UI1)				{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+		if (!m_fuelMap)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (m_xsize == (std::uint16_t)-1)		{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (!m_array_ui1)						{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+		if (m_optionType != VT_UI1)				{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 		if (x_min >= m_xsize)					return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 		if (y_min >= m_ysize)					return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 		if (x_max >= m_xsize)					return ERROR_GRID_LOCATION_OUT_OF_RANGE;
@@ -661,7 +661,7 @@ HRESULT CCWFGM_AttributeFilter::GetFuelIndexDataArray(Layer *layerThread, const 
 
 HRESULT CCWFGM_AttributeFilter::GetAttributeData(Layer *layerThread, const XY_Point &pt, const HSS_Time::WTime &time, const HSS_Time::WTimeSpan& timeSpan, std::uint16_t option, std::uint64_t optionFlags, NumericVariant *attribute, grid::AttributeValue *attribute_valid, XY_Rectangle *cache_bbox) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (option == m_optionKey)
 		return getPoint(pt, attribute, attribute_valid);
 	return gridEngine->GetAttributeData(layerThread, pt, time, timeSpan, option, optionFlags, attribute, attribute_valid, cache_bbox);
@@ -671,7 +671,7 @@ HRESULT CCWFGM_AttributeFilter::GetAttributeData(Layer *layerThread, const XY_Po
 HRESULT CCWFGM_AttributeFilter::GetAttributeDataArray(Layer *layerThread, const XY_Point &min_pt, const XY_Point &max_pt, double scale, const HSS_Time::WTime &time, const HSS_Time::WTimeSpan& timeSpan,
     std::uint16_t option, std::uint64_t optionFlags, NumericVariant_2d *attribute, attribute_t_2d *attribute_valid) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	if (option == m_optionKey) {
 		std::uint16_t x_min = convertX(min_pt.x, nullptr), y_min = convertY(min_pt.y, nullptr);
@@ -807,7 +807,7 @@ HRESULT CCWFGM_AttributeFilter::SetAttribute(std::uint16_t option, const Polymor
 	std::uint32_t *cnt, old;
 	bool bval;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(0, &cnt);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	switch (option) {
 		case CWFGM_GRID_ATTRIBUTE_GIS_CANRESIZE:
@@ -815,7 +815,7 @@ HRESULT CCWFGM_AttributeFilter::SetAttribute(std::uint16_t option, const Polymor
 									bval = std::get<bool>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								old = m_flags;
@@ -833,7 +833,7 @@ HRESULT CCWFGM_AttributeFilter::SetAttribute(std::uint16_t option, const Polymor
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								if (str.length()) {
@@ -849,7 +849,7 @@ HRESULT CCWFGM_AttributeFilter::SetAttribute(std::uint16_t option, const Polymor
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								if (str.length()) {
@@ -865,7 +865,7 @@ HRESULT CCWFGM_AttributeFilter::SetAttribute(std::uint16_t option, const Polymor
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								m_gisUID = str;
@@ -879,7 +879,7 @@ HRESULT CCWFGM_AttributeFilter::SetAttribute(std::uint16_t option, const Polymor
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								m_gisPWD = str;
@@ -906,7 +906,7 @@ HRESULT CCWFGM_AttributeFilter::fixResolution(std::shared_ptr<validation::valida
 	PolymorphicAttribute var;
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine;
-	if (!(gridEngine = m_gridEngine(nullptr)))				{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!(gridEngine = m_gridEngine(nullptr)))				{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	/*POLYMORPHIC CHECK*/
 	if (FAILED(hr = gridEngine->GetDimensions(0, &m_xsize, &m_ysize)))
@@ -921,7 +921,7 @@ HRESULT CCWFGM_AttributeFilter::fixResolution(std::shared_ptr<validation::valida
 				validation::id::initialization_incomplete, "resolution");
 		return hr;
 	}
-	try { gridResolution = std::get<double>(var); } catch (std::bad_variant_access &) { weak_assert(0); return E_FAIL; };
+	try { gridResolution = std::get<double>(var); } catch (std::bad_variant_access &) { weak_assert(false); return E_FAIL; };
 
 	if (FAILED(hr = gridEngine->GetAttribute(nullptr, CWFGM_GRID_ATTRIBUTE_XLLCORNER, &var))) {
 		if (valid)
@@ -933,7 +933,7 @@ HRESULT CCWFGM_AttributeFilter::fixResolution(std::shared_ptr<validation::valida
 				validation::id::initialization_incomplete, "xllcorner");
 		return hr;
 	}
-	try { gridXLL = std::get<double>(var); } catch (std::bad_variant_access &) { weak_assert(0); return E_FAIL; };
+	try { gridXLL = std::get<double>(var); } catch (std::bad_variant_access &) { weak_assert(false); return E_FAIL; };
 
 	if (FAILED(hr = gridEngine->GetAttribute(nullptr, CWFGM_GRID_ATTRIBUTE_YLLCORNER, &var))) {
 		if (valid)
@@ -945,7 +945,7 @@ HRESULT CCWFGM_AttributeFilter::fixResolution(std::shared_ptr<validation::valida
 				validation::id::initialization_incomplete, "yllcorner");
 		return hr;
 	}
-	try { gridYLL = std::get<double>(var); } catch (std::bad_variant_access &) { weak_assert(0); return E_FAIL; };
+	try { gridYLL = std::get<double>(var); } catch (std::bad_variant_access &) { weak_assert(false); return E_FAIL; };
 
 	m_resolution = gridResolution;
 	m_xllcorner = gridXLL;

@@ -101,7 +101,7 @@ HRESULT CCWFGM_Asset::ImportPolylines(const std::string& file_path, const std::v
 			projection = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) { 
-			weak_assert(0); 
+			weak_assert(false); 
 			if (pd) {
 				std::uint32_t i = 0;
 				while (pd[i])
@@ -114,7 +114,7 @@ HRESULT CCWFGM_Asset::ImportPolylines(const std::string& file_path, const std::v
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	}
 	else {
-		weak_assert(0);
+		weak_assert(false);
 		if (pd) {
 			std::uint32_t i = 0;
 			while (pd[i])
@@ -211,14 +211,14 @@ HRESULT CCWFGM_Asset::ImportPolylinesWFS(const std::string& url, const std::stri
 			projection = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			return ERROR_PROJECTION_UNKNOWN;
 		};
 
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	}
 	else {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 
@@ -295,14 +295,14 @@ HRESULT CCWFGM_Asset::ExportPolylines(const std::string& driver_name,  const std
 			projection = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			return ERROR_PROJECTION_UNKNOWN;
 		}
 
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	}
 	else {
-		weak_assert(0);
+		weak_assert(false);
 		if (oTargetSRS)
 			OSRDestroySpatialReference(oTargetSRS);
 		return ERROR_VECTOR_UNINITIALIZED;
@@ -372,7 +372,7 @@ CCWFGM_Asset* CCWFGM_Asset::deserialize(const google::protobuf::Message& proto, 
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmAsset", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "gridEngine");
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmAsset: No gridEngine";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmAsset: Incomplete initialization");
 	}
@@ -387,7 +387,7 @@ CCWFGM_Asset* CCWFGM_Asset::deserialize(const google::protobuf::Message& proto, 
 			/// </summary>
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmAsset", name, validation::error_level::SEVERE, validation::id::object_invalid, proto.GetDescriptor()->name());
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmAsset: Protobuf object invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmAsset: Protobuf object invalid", ERROR_PROTOBUF_OBJECT_INVALID);
 	}
@@ -398,7 +398,7 @@ CCWFGM_Asset* CCWFGM_Asset::deserialize(const google::protobuf::Message& proto, 
 			/// </summary>
 			/// <type>user</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmAsset", name, validation::error_level::SEVERE, validation::id::version_mismatch, std::to_string(filter->version()));
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmAsset: Version is invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmAsset: Version is invalid", ERROR_PROTOBUF_OBJECT_VERSION_INVALID);
 	}
@@ -446,7 +446,7 @@ CCWFGM_Asset* CCWFGM_Asset::deserialize(const google::protobuf::Message& proto, 
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmAsset", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "projection");
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmAsset: Incomplete initialization";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmAsset: Incomplete initialization");
 	}

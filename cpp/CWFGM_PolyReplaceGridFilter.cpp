@@ -82,7 +82,7 @@ CCWFGM_PolyReplaceGridFilter::~CCWFGM_PolyReplaceGridFilter() {
 
 HRESULT CCWFGM_PolyReplaceGridFilter::MT_Lock(Layer *layerThread, bool exclusive, std::uint16_t obtain) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)	{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)	{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	HRESULT hr;
 	if (obtain == (std::uint16_t)-1) {
@@ -116,7 +116,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::MT_Lock(Layer *layerThread, bool exclusive
 HRESULT CCWFGM_PolyReplaceGridFilter::GetFuelData(Layer *layerThread, const XY_Point &pt, const HSS_Time::WTime &time, ICWFGM_Fuel **fuel, bool *fuel_valid, XY_Rectangle *cache_bbox) {
 	if (!fuel)								return E_POINTER;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	HRESULT hr;
 
@@ -190,7 +190,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::GetFuelDataArray(Layer *layerThread, const
 	if (!fuel)										return E_POINTER;
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	if (!m_replaceArray)
 		calculateReplaceArray();
@@ -378,7 +378,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::GetAttribute(Layer *layerThread, std::uint
 	}
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetAttribute(layerThread, option, value);
 }
 
@@ -572,7 +572,7 @@ void CCWFGM_PolyReplaceGridFilter::calculateReplaceArray() {
 	if (FAILED(gridEngine->GetDimensions(0, &x_dim, &y_dim)))	return;
 
 	if (m_replaceArray) {
-		weak_assert(0);
+		weak_assert(false);
 		delete m_replaceArray;
 	}
 	m_replaceArray = new bool_2d(boost::extents[x_dim][y_dim]);
@@ -622,7 +622,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::SetAttribute(std::uint16_t option, const P
 	std::uint32_t *cnt, old;
 	bool bval;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(nullptr, &cnt);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	switch (option) {
 		case CWFGM_GRID_ATTRIBUTE_GIS_CANRESIZE:
@@ -630,7 +630,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::SetAttribute(std::uint16_t option, const P
 									bval = std::get<bool>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								old = m_flags;
@@ -648,7 +648,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::SetAttribute(std::uint16_t option, const P
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								if (str.length()) {
@@ -664,7 +664,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::SetAttribute(std::uint16_t option, const P
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								if (str.length()) {
@@ -680,7 +680,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::SetAttribute(std::uint16_t option, const P
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								m_gisUID = str;
@@ -694,7 +694,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::SetAttribute(std::uint16_t option, const P
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								m_gisPWD = str;
@@ -723,7 +723,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::fixResolution() {
 	PolymorphicAttribute var;
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine;
-	if (!(gridEngine = m_gridEngine(nullptr)))					{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!(gridEngine = m_gridEngine(nullptr)))					{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	/*POLYMORPHIC CHECK*/
 	try {
@@ -731,7 +731,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::fixResolution() {
 		if (FAILED(hr = gridEngine->GetAttribute(nullptr, CWFGM_GRID_ATTRIBUTE_XLLCORNER, &var))) return hr; gridXLL = std::get<double>(var);
 		if (FAILED(hr = gridEngine->GetAttribute(nullptr, CWFGM_GRID_ATTRIBUTE_YLLCORNER, &var))) return hr; gridYLL = std::get<double>(var);
 	} catch (std::bad_variant_access &) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_GRID_UNINITIALIZED;
 	}
 

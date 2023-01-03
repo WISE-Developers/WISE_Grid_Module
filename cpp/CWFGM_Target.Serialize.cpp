@@ -89,7 +89,7 @@ HRESULT CCWFGM_Target::ImportPointSet(const std::string& file_path, const std::v
 		/*POLYMORPHIC CHECK*/
 		try { projection = std::get<std::string>(var); }
 		catch (std::bad_variant_access&) { 
-			weak_assert(0);
+			weak_assert(false);
 			if (pd) {
 				std::uint32_t i = 0;
 				while (pd[i])
@@ -102,7 +102,7 @@ HRESULT CCWFGM_Target::ImportPointSet(const std::string& file_path, const std::v
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	}
 	else {
-		weak_assert(0);
+		weak_assert(false);
 		if (pd) { std::uint32_t i = 0; while (pd[i]) free((APTR)pd[i++]); free(pd); }
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
@@ -185,12 +185,12 @@ HRESULT CCWFGM_Target::ImportPointSetWFS(const std::string& url, const std::stri
 
 		/*POLYMORPHIC CHECK*/
 		try { projection = std::get<std::string>(var); }
-		catch (std::bad_variant_access&) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+		catch (std::bad_variant_access&) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	}
 	else {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 
@@ -252,12 +252,12 @@ HRESULT CCWFGM_Target::ExportPointSet(const std::string& driver_name, const std:
 
 		/*POLYMORPHIC CHECK*/
 		try { projection = std::get<std::string>(var); }
-		catch (std::bad_variant_access&) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+		catch (std::bad_variant_access&) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	}
 	else {
-		weak_assert(0);
+		weak_assert(false);
 		if (oTargetSRS)
 			OSRDestroySpatialReference(oTargetSRS);
 		return ERROR_VECTOR_UNINITIALIZED;
@@ -323,7 +323,7 @@ CCWFGM_Target* CCWFGM_Target::deserialize(const google::protobuf::Message& proto
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmTarget", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "gridEngine");
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmTarget: No grid engine";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmTarget: Incomplete initialization");
 	}
@@ -338,7 +338,7 @@ CCWFGM_Target* CCWFGM_Target::deserialize(const google::protobuf::Message& proto
 			/// </summary>
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmTarget", name, validation::error_level::SEVERE, validation::id::object_invalid, proto.GetDescriptor()->name());
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmTarget: Protobuf object invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmTarget: Protobuf object invalid", ERROR_PROTOBUF_OBJECT_INVALID);
 	}
@@ -351,7 +351,7 @@ CCWFGM_Target* CCWFGM_Target::deserialize(const google::protobuf::Message& proto
 			/// </summary>
 			/// <type>user</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmTarget", name, validation::error_level::SEVERE, validation::id::version_mismatch, std::to_string(filter->version()));
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmTarget: Version is invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmTarget: Version is invalid", ERROR_PROTOBUF_OBJECT_VERSION_INVALID);
 	}
@@ -371,7 +371,7 @@ CCWFGM_Target* CCWFGM_Target::deserialize(const google::protobuf::Message& proto
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmTarget", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "projection");
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmTarget: Incomplete initialization";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmTarget: Incomplete initialization");
 	}

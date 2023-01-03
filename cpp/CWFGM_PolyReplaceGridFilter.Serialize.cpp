@@ -61,7 +61,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygons(const std::string & file_pa
 	CSemaphoreEngage lock(GDALClient::GDALClient::getGDALMutex(), TRUE);
 
 	if ((m_xllcorner == -999999999.0) && (m_yllcorner == -999999999.0) && (m_resolution == -1.0)) {
-		weak_assert(0);
+		weak_assert(false);
 		fixResolution();
 	}
 
@@ -83,7 +83,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygons(const std::string & file_pa
 
 		/*POLYMORPHIC CHECK*/
 		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			if (pd) {
 				std::uint32_t i = 0;
 				while (pd[i])
@@ -95,7 +95,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygons(const std::string & file_pa
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	}
 	else {
-		weak_assert(0);
+		weak_assert(false);
 		if (pd) { std::uint32_t i = 0; while (pd[i]) free((APTR)pd[i++]); free(pd); }
 		return ERROR_GRID_UNINITIALIZED;
 	}
@@ -143,7 +143,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygonsWFS( const std::string & url
 	OGRSpatialReferenceH oSourceSRS = NULL;
 
 	if ((m_xllcorner == -999999999.0) && (m_yllcorner == -999999999.0) && (m_resolution == -1.0)) {
-		weak_assert(0);
+		weak_assert(false);
 		fixResolution();
 	}
 
@@ -157,12 +157,12 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygonsWFS( const std::string & url
 		std::string projection;
 
 		/*POLYMORPHIC CHECK*/
-		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	}
 	else {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_GRID_UNINITIALIZED;
 	}
 	XY_PolyLLSet set;
@@ -208,7 +208,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ExportPolygons(const std::string & driver_
 	OGRSpatialReferenceH oTargetSRS = CCoordinateConverter::CreateSpatialReferenceFromStr(csProjection.c_str());
 
 	if ((m_xllcorner == -999999999.0) && (m_yllcorner == -999999999.0) && (m_resolution == -1.0)) {
-		weak_assert(0);
+		weak_assert(false);
 		fixResolution();
 	}
 
@@ -218,11 +218,11 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ExportPolygons(const std::string & driver_
 		std::string projection;
 
 		/*POLYMORPHIC CHECK*/
-		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	} else {
-		weak_assert(0);
+		weak_assert(false);
 		if (oTargetSRS)
 			OSRDestroySpatialReference(oTargetSRS);
 		return ERROR_GRID_UNINITIALIZED;
@@ -281,7 +281,7 @@ CCWFGM_PolyReplaceGridFilter *CCWFGM_PolyReplaceGridFilter::deserialize(const go
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmPolyReplaceGridFilter", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "gridEngine");
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmPolyReplaceGridFilter: No grid engine";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmPolyReplaceGridFilter: Incomplete initialization");
 	}
@@ -295,7 +295,7 @@ CCWFGM_PolyReplaceGridFilter *CCWFGM_PolyReplaceGridFilter::deserialize(const go
 			/// </summary>
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmPolyReplaceGridFilter", name, validation::error_level::SEVERE, validation::id::object_invalid, proto.GetDescriptor()->name());
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmPolyReplaceGridFilter: Protobuf object invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmPolyReplaceGridFilter: Protobuf object invalid", ERROR_PROTOBUF_OBJECT_INVALID);
 	}
@@ -306,7 +306,7 @@ CCWFGM_PolyReplaceGridFilter *CCWFGM_PolyReplaceGridFilter::deserialize(const go
 			/// </summary>
 			/// <type>user</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmPolyReplaceGridFilter", name, validation::error_level::SEVERE, validation::id::version_mismatch, std::to_string(filter->version()));
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmPolyReplaceGridFilter: Version is invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmPolyReplaceGridFilter: Version is invalid", ERROR_PROTOBUF_OBJECT_VERSION_INVALID);
 	}
@@ -324,7 +324,7 @@ CCWFGM_PolyReplaceGridFilter *CCWFGM_PolyReplaceGridFilter::deserialize(const go
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmPolyReplaceGridFilter", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "projection");
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmPolyReplaceGridFilter: Incomplete initialization";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmPolyReplaceGridFilter: Incomplete initialization");
 	}

@@ -58,7 +58,7 @@ HRESULT CCWFGM_Grid::ImportGrid(const std::string & prj_file_name, const std::st
 	CRWThreadSemaphoreEngage engage(m_lock, SEM_TRUE, &engaged, 1000000LL);
 	if (!engaged)								return ERROR_SCENARIO_SIMULATION_RUNNING;
 
-	if (!m_fuelMap)								{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }		// we need a fuelMap to load correctly
+	if (!m_fuelMap)								{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }		// we need a fuelMap to load correctly
 
 	double scale;
 	std::string grid(grid_file_name), prj(prj_file_name);
@@ -608,7 +608,7 @@ HRESULT CCWFGM_Grid::ExportGrid(const std::string & grid_file_name, std::uint32_
 	std::string ref;
 
 	/*POLYMORPHIC CHECK*/
-	try { ref = std::get<std::string>(v); } catch (std::bad_variant_access &) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+	try { ref = std::get<std::string>(v); } catch (std::bad_variant_access &) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 	exporter.setExportCompress((GDALExporter::CompressionType)compression);
 	exporter.setProjection(ref.c_str());
@@ -709,7 +709,7 @@ HRESULT CCWFGM_Grid::ExportElevation(const std::string & grid_file_name) {
 	std::string grid;
 
 	if (!m_baseGrid.m_elevationArray) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_GRID_UNINITIALIZED;
 	}
 	grid = grid_file_name;
@@ -738,7 +738,7 @@ HRESULT CCWFGM_Grid::ExportElevation(const std::string & grid_file_name) {
 	std::string ref;
 
 	/*POLYMORPHIC CHECK*/
-	try { ref = std::get<std::string>(v); } catch (std::bad_variant_access &) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+	try { ref = std::get<std::string>(v); } catch (std::bad_variant_access &) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 	exporter.setProjection(ref.c_str());
 	exporter.setSize(m_baseGrid.m_xsize, m_baseGrid.m_ysize);
@@ -760,7 +760,7 @@ HRESULT CCWFGM_Grid::ExportSlope(const std::string & grid_file_name) {
 	CRWThreadSemaphoreEngage engage(m_lock, SEM_FALSE);
 
 	if (!m_baseGrid.m_slopeAzimuth) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_GRID_UNINITIALIZED;
 	}
 
@@ -788,7 +788,7 @@ HRESULT CCWFGM_Grid::ExportSlope(const std::string & grid_file_name) {
 	std::string ref;
 
 	/*POLYMORPHIC CHECK*/
-	try { ref = std::get<std::string>(v); } catch (std::bad_variant_access &) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+	try { ref = std::get<std::string>(v); } catch (std::bad_variant_access &) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 	exporter.setProjection(ref.c_str());
 	exporter.setSize(m_baseGrid.m_xsize, m_baseGrid.m_ysize);
@@ -810,7 +810,7 @@ HRESULT CCWFGM_Grid::ExportAspect(const std::string & grid_file_name) {
 	CRWThreadSemaphoreEngage engage(m_lock, SEM_FALSE);
 
 	if (!m_baseGrid.m_slopeFactor) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_GRID_UNINITIALIZED;
 	}
 
@@ -844,7 +844,7 @@ HRESULT CCWFGM_Grid::ExportAspect(const std::string & grid_file_name) {
 	std::string ref;
 
 	/*POLYMORPHIC CHECK*/
-	try { ref = std::get<std::string>(v); } catch (std::bad_variant_access &) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+	try { ref = std::get<std::string>(v); } catch (std::bad_variant_access &) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 	exporter.setProjection(ref.c_str());
 	exporter.setSize(m_baseGrid.m_xsize, m_baseGrid.m_ysize);
@@ -961,7 +961,7 @@ CCWFGM_Grid *CCWFGM_Grid::deserialize(const google::protobuf::Message& proto, st
 			/// </summary>
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmGrid", name, validation::error_level::SEVERE, validation::id::object_invalid, proto.GetDescriptor()->name());
-		weak_assert(0);
+		weak_assert(false);
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmGrid: Protobuf object invalid", ERROR_PROTOBUF_OBJECT_INVALID);
 	}
 	if ((grid->version() != 1) && (grid->version() != 2)) {
@@ -971,7 +971,7 @@ CCWFGM_Grid *CCWFGM_Grid::deserialize(const google::protobuf::Message& proto, st
 			/// </summary>
 			/// <type>user</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmGrid", name, validation::error_level::SEVERE, validation::id::version_mismatch, std::to_string(grid->version()));
-		weak_assert(0);
+		weak_assert(false);
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmGrid: Version is invalid", ERROR_PROTOBUF_OBJECT_VERSION_INVALID);
 	}
 
@@ -1004,7 +1004,7 @@ CCWFGM_Grid *CCWFGM_Grid::deserialize(const google::protobuf::Message& proto, st
 				/// </summary>
 				/// <type>user</type>
 				myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "ll_latitude", validation::error_level::SEVERE, "Location.Latitude:Invalid", std::to_string(value));
-			weak_assert(0);
+			weak_assert(false);
 			throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmGrid: Invalid latitude value");
 		}
 		if (value > DEGREE_TO_RADIAN(90.0)) {
@@ -1014,7 +1014,7 @@ CCWFGM_Grid *CCWFGM_Grid::deserialize(const google::protobuf::Message& proto, st
 				/// </summary>
 				/// <type>user</type>
 				myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "ll_latitude", validation::error_level::SEVERE, "Location.Latitude:Invalid", std::to_string(value));
-			weak_assert(0);
+			weak_assert(false);
 			throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmGrid: Invalid latitude value");
 		}
 		m_worldLocation.m_latitude(value);
@@ -1027,7 +1027,7 @@ CCWFGM_Grid *CCWFGM_Grid::deserialize(const google::protobuf::Message& proto, st
 				/// </summary>
 				/// <type>user</type>
 				myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "ll_longitude", validation::error_level::SEVERE, "Location.Longitude:Invalid", std::to_string(value));
-			weak_assert(0);
+			weak_assert(false);
 			throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmGrid: Invalid longitude value");
 		}
 		if (value > DEGREE_TO_RADIAN(180.0)) { 
@@ -1037,7 +1037,7 @@ CCWFGM_Grid *CCWFGM_Grid::deserialize(const google::protobuf::Message& proto, st
 				/// </summary>
 				/// <type>user</type>
 				myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "ll_longitude", validation::error_level::SEVERE, "Location.Longitude:Invalid", std::to_string(value));
-			weak_assert(0);
+			weak_assert(false);
 			throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmGrid: Invalid longitude value");
 		}
 		m_worldLocation.m_longitude(value);
