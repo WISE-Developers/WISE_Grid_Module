@@ -28,6 +28,7 @@ public class IWXData {
 	public double rh;
 	public double precipitation;
 	public double windSpeed;
+	public double windGust;
 	public double windDirection;
 	public long specifiedBits;
 	
@@ -39,6 +40,7 @@ public class IWXData {
 		this.rh = toCopy.rh;
 		this.precipitation = toCopy.precipitation;
 		this.windSpeed = toCopy.windSpeed;
+		this.windGust = toCopy.windGust;
 		this.windDirection = toCopy.windDirection;
 		this.specifiedBits = toCopy.specifiedBits;
 	}
@@ -50,9 +52,10 @@ public class IWXData {
 		public static final long PRECIPITATION			= 0x00000008;
 		public static final long WINDSPEED				= 0x00000010;
 		public static final long WINDDIRECTION			= 0x00000020;
-		public static final long ALL					= TEMPERATURE | DEWPOINTTEMPERATURE | RH | PRECIPITATION | WINDSPEED | WINDDIRECTION;
-		public static final long INTERPOLATED			= 0x00000040;
-		public static final long ENSEMBLE               = 0x00000080;
-        public static final long INVALID_DATA           = 0x00000100;
+		public static final long WINDGUST				= 0x00000040;
+		public static final long ALL					= TEMPERATURE | DEWPOINTTEMPERATURE | RH | PRECIPITATION | WINDSPEED | WINDDIRECTION | WINDGUST;
+		public static final long INTERPOLATED			= 0x00000100;
+		public static final long ENSEMBLE               = 0x00000200;
+        public static final long INVALID_DATA           = 0x00000400;
 	}
 }
