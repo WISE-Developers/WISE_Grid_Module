@@ -87,7 +87,7 @@ HRESULT ICWFGM_GridEngine::PutGridEngine(Layer *layerThread, ICWFGM_GridEngine *
 			return S_OK;
 		}
 	}
-	if (!m_layerManager) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_layerManager) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return m_layerManager->PutGridEngine(layerThread, this, newVal);
 }
 
@@ -123,7 +123,7 @@ HRESULT ICWFGM_GridEngine::put_LayerManager(CCWFGM_LayerManager *newVal) {
 HRESULT ICWFGM_GridEngine::Valid(Layer *layerThread, const HSS_Time::WTime &start_time, const HSS_Time::WTimeSpan &duration, std::uint32_t option, std::vector<uint16_t> *application_count) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
 
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	HRESULT hr = gridEngine->Valid(layerThread, start_time, duration, option, application_count);
 	return hr;
 }
@@ -131,7 +131,7 @@ HRESULT ICWFGM_GridEngine::Valid(Layer *layerThread, const HSS_Time::WTime &star
 
 HRESULT ICWFGM_GridEngine::GetEventTime(Layer *layerThread, const XY_Point& pt, std::uint32_t flags, const HSS_Time::WTime &from_time, HSS_Time::WTime *next_event, bool* event_valid) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	HRESULT hr = gridEngine->GetEventTime(layerThread, pt, flags, from_time, next_event, event_valid);
 	return hr;
 }
@@ -139,7 +139,7 @@ HRESULT ICWFGM_GridEngine::GetEventTime(Layer *layerThread, const XY_Point& pt, 
 
 HRESULT ICWFGM_GridEngine::GetCommonData(Layer* layerThread, ICWFGM_CommonData** pVal) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetCommonData(layerThread, pVal);
 }
 
@@ -151,7 +151,7 @@ HRESULT ICWFGM_GridEngine::PutCommonData(Layer* layerThread, ICWFGM_CommonData* 
 
 HRESULT ICWFGM_GridEngine::GetDimensions(Layer *layerThread, std::uint16_t *x_dim, std::uint16_t *y_dim) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetDimensions(layerThread, x_dim, y_dim);
 }
 
@@ -159,14 +159,14 @@ HRESULT ICWFGM_GridEngine::GetDimensions(Layer *layerThread, std::uint16_t *x_di
 HRESULT ICWFGM_GridEngine::GetFuelData(Layer *layerThread, const XY_Point &pt, const HSS_Time::WTime &time, ICWFGM_Fuel **fuel, bool *fuel_valid, XY_Rectangle *cache_bbox)
 {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetFuelData(layerThread, pt, time, fuel, fuel_valid, cache_bbox);
 
 }
 
 HRESULT ICWFGM_GridEngine::GetFuelIndexData(Layer *layerThread, const XY_Point &pt, const HSS_Time::WTime &time, std::uint8_t *fuel_index, bool *fuel_valid, XY_Rectangle *cache_bbox) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetFuelIndexData(layerThread, pt, time, fuel_index, fuel_valid, cache_bbox);
 }
 
@@ -174,7 +174,7 @@ HRESULT ICWFGM_GridEngine::GetFuelIndexData(Layer *layerThread, const XY_Point &
 HRESULT ICWFGM_GridEngine::GetFuelDataArray(Layer *layerThread, const XY_Point &min_pt, const XY_Point &max_pt, double scale, const HSS_Time::WTime &time, ICWFGM_Fuel_2d *fuel, bool_2d *fuel_valid)
 {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetFuelDataArray(layerThread, min_pt, max_pt, scale, time, fuel, fuel_valid);
 }
 
@@ -182,14 +182,14 @@ HRESULT ICWFGM_GridEngine::GetFuelDataArray(Layer *layerThread, const XY_Point &
 HRESULT ICWFGM_GridEngine::GetFuelIndexDataArray(Layer *layerThread, const XY_Point &min_pt, const XY_Point &max_pt, double scale,
 	const HSS_Time::WTime &time, uint8_t_2d *fuel_index, bool_2d *fuel_valid) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetFuelIndexDataArray(layerThread, min_pt, max_pt, scale, time, fuel_index, fuel_valid);
 }
 
 
 HRESULT ICWFGM_GridEngine::GetElevationData(Layer *layerThread, const XY_Point &pt, bool allow_defaults_returned, double *elevation, double *slope_factor, double *slope_azimuth, grid::TerrainValue *elev_valid, grid::TerrainValue *terrain_valid, XY_Rectangle *cache_bbox) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetElevationData(layerThread, pt, allow_defaults_returned, elevation, slope_factor, slope_azimuth, elev_valid, terrain_valid, cache_bbox);
 }
 
@@ -198,7 +198,7 @@ HRESULT ICWFGM_GridEngine::GetElevationDataArray(Layer *layerThread, const XY_Po
 	double_2d *elevation, double_2d *slope_factor, double_2d *slope_azimuth, terrain_t_2d *elev_valid, terrain_t_2d *terrain_valid) {
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetElevationDataArray(layerThread, min_pt, max_pt, scale, allow_defaults_returned, elevation, slope_factor, slope_azimuth, elev_valid, terrain_valid);
 }
 
@@ -207,7 +207,7 @@ HRESULT ICWFGM_GridEngine::GetWeatherData(Layer *layerThread, const XY_Point &pt
 	IWXData *wx, IFWIData *ifwi, DFWIData *dfwi, bool *wx_valid, XY_Rectangle *cache_bbox) {
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetWeatherData(layerThread, pt, time, interpolate_method, wx, ifwi, dfwi, wx_valid, cache_bbox);
 }
 
@@ -216,14 +216,14 @@ HRESULT ICWFGM_GridEngine::GetWeatherDataArray(Layer *layerThread, const XY_Poin
 		IWXData_2d *wx, IFWIData_2d *ifwi, DFWIData_2d *dfwi, bool_2d *wx_valid) {
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetWeatherDataArray(layerThread, min_pt, max_pt, scale, time, interpolate_method, wx, ifwi, dfwi, wx_valid);
 }
 
 
 HRESULT ICWFGM_GridEngine::GetAttributeData(Layer *layerThread, const XY_Point &pt, const HSS_Time::WTime &time, const HSS_Time::WTimeSpan& timeSpan, std::uint16_t option, std::uint64_t optionFlags, NumericVariant *attribute, grid::AttributeValue *attribute_valid, XY_Rectangle *cache_bbox) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetAttributeData(layerThread, pt, time, timeSpan, option, optionFlags, attribute, attribute_valid, cache_bbox);
 }
 
@@ -231,7 +231,7 @@ HRESULT ICWFGM_GridEngine::GetAttributeData(Layer *layerThread, const XY_Point &
 HRESULT ICWFGM_GridEngine::GetAttributeDataArray(Layer *layerThread, const XY_Point &min_pt, const XY_Point &max_pt, double scale, const HSS_Time::WTime &time, const HSS_Time::WTimeSpan& timeSpan,
 	std::uint16_t option, std::uint64_t optionFlags, NumericVariant_2d *attribute, attribute_t_2d *attribute_valid) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return gridEngine->GetAttributeDataArray(layerThread, min_pt, max_pt, scale, time, timeSpan, option, optionFlags, attribute, attribute_valid);
 }
 
@@ -239,7 +239,7 @@ HRESULT ICWFGM_GridEngine::GetAttributeDataArray(Layer *layerThread, const XY_Po
 HRESULT ICWFGM_GridEngine::PreCalculationEvent(Layer *layerThread, const HSS_Time::WTime &time, std::uint32_t mode, CalculationEventParms *parms) {
 	std::uint32_t *cnt;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread, &cnt);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	if ((mode & (~(1 << CWFGM_SCENARIO_OPTION_WEATHER_ALTERNATE_CACHE))) == 1) {
 		(*cnt)++;
@@ -252,7 +252,7 @@ HRESULT ICWFGM_GridEngine::PreCalculationEvent(Layer *layerThread, const HSS_Tim
 HRESULT ICWFGM_GridEngine::PostCalculationEvent(Layer *layerThread, const HSS_Time::WTime &time, std::uint32_t mode, CalculationEventParms *parms) {
 	std::uint32_t *cnt;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread, &cnt);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if ((mode & (~(1 << CWFGM_SCENARIO_OPTION_WEATHER_ALTERNATE_CACHE))) == 1) {
 		(*cnt)--;
 	}

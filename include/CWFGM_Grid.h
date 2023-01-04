@@ -63,11 +63,11 @@ public:
 	GridData(const GridData &toCopy);
 	~GridData();
 
-	__INLINE std::uint16_t convertX(double x, XY_Rectangle *bbox);
-	__INLINE std::uint16_t convertY(double y, XY_Rectangle *bbox);
-	__INLINE double invertX(double x)					{ return x * m_resolution + m_xllcorner; }
-	__INLINE double invertY(double y)					{ return y * m_resolution + m_yllcorner; }
-	__INLINE std::uint32_t arrayIndex(const std::uint16_t x, const std::uint16_t y) const {
+	std::uint16_t convertX(double x, XY_Rectangle *bbox);
+	std::uint16_t convertY(double y, XY_Rectangle *bbox);
+	double invertX(double x)					{ return x * m_resolution + m_xllcorner; }
+	double invertY(double y)					{ return y * m_resolution + m_yllcorner; }
+	std::uint32_t arrayIndex(const std::uint16_t x, const std::uint16_t y) const {
 		weak_assert(x < m_xsize);
 		weak_assert(y < m_ysize);
 		return (m_ysize - (y + 1)) * m_xsize + x;

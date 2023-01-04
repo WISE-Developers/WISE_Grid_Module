@@ -42,8 +42,8 @@ using namespace HSS_Time;
 
 class DailyAttribute : public MinNode {
 public:
-	DEVICE __INLINE DailyAttribute *LN_Succ() const { return (DailyAttribute *)MinNode::LN_Succ(); };
-	DEVICE __INLINE DailyAttribute *LN_Pred() const { return (DailyAttribute *)MinNode::LN_Pred(); };
+	DEVICE DailyAttribute *LN_Succ() const { return (DailyAttribute *)MinNode::LN_Succ(); };
+	DEVICE DailyAttribute *LN_Pred() const { return (DailyAttribute *)MinNode::LN_Pred(); };
 
 	DailyAttribute(WTimeManager *tm);
 
@@ -72,8 +72,8 @@ public:
 
 class SeasonalAttribute : public MinNode {
 public:
-	DEVICE __INLINE SeasonalAttribute *LN_Succ() const { return (SeasonalAttribute *)MinNode::LN_Succ(); };
-	DEVICE __INLINE SeasonalAttribute *LN_Pred() const { return (SeasonalAttribute *)MinNode::LN_Pred(); };
+	DEVICE SeasonalAttribute *LN_Succ() const { return (SeasonalAttribute *)MinNode::LN_Succ(); };
+	DEVICE SeasonalAttribute *LN_Pred() const { return (SeasonalAttribute *)MinNode::LN_Pred(); };
 
 	SeasonalAttribute();
 

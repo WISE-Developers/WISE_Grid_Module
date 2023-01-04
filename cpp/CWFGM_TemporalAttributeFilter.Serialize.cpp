@@ -108,7 +108,7 @@ CCWFGM_TemporalAttributeFilter *CCWFGM_TemporalAttributeFilter::deserialize(cons
 			/// </summary>
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.TemporalCondition", name, validation::error_level::SEVERE, validation::id::object_invalid, proto.GetDescriptor()->name());
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmTemporalAttributeFilter: Protobuf object invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmTemporalAttributeFilter: Protobuf object invalid", ERROR_PROTOBUF_OBJECT_INVALID);
 	}
@@ -121,7 +121,7 @@ CCWFGM_TemporalAttributeFilter *CCWFGM_TemporalAttributeFilter::deserialize(cons
 			/// </summary>
 			/// <type>user</type>
 			valid->add_child_validation("WISE.GridProto.TemporalCondition", name, validation::error_level::SEVERE, validation::id::version_mismatch, std::to_string(tempo->version()));
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmTemporalAttributeFilter: Version is invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmTemporalAttributeFilter: Version is invalid", ERROR_PROTOBUF_OBJECT_VERSION_INVALID);
 	}
@@ -369,7 +369,7 @@ CCWFGM_TemporalAttributeFilter *CCWFGM_TemporalAttributeFilter::deserialize(cons
 			m_attributes.Insert(da, _where->LN_Pred());
 		}
 		else {
-			weak_assert(0);
+			weak_assert(false);
 			delete da;
 		}
 	}
@@ -460,7 +460,7 @@ CCWFGM_TemporalAttributeFilter *CCWFGM_TemporalAttributeFilter::deserialize(cons
 				m_conditions.Insert(sa, _where->LN_Pred());
 		}
 		else {
-			weak_assert(0);
+			weak_assert(false);
 			delete sa;
 		}
 	}

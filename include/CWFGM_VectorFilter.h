@@ -420,7 +420,7 @@ protected:
 	HRESULT getBreakSize(std::uint32_t index, std::uint32_t sub_index, const HSS_Time::WTime &time, std::uint32_t *count) const;
 	HRESULT getBreak(std::uint32_t index, std::uint32_t sub_index, const HSS_Time::WTime &time, std::uint32_t *size, XY_Poly *xy_pairs) const;
 
-	__INLINE void clearFirebreak()	{ m_firebreaks.clear(); };
+	void clearFirebreak()	{ m_firebreaks.clear(); };
 	void buildFirebreak();
 #endif
 };

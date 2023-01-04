@@ -310,7 +310,7 @@ HRESULT CCWFGM_Asset::GetPolyLineRange(std::uint32_t index, XY_Point* min_pt, XY
 
 HRESULT CCWFGM_Asset::GetAssetRange(std::uint32_t index, const HSS_Time::WTime& time, XY_Point* min_pt,  XY_Point* max_pt) {
 	if (!m_gridEngine) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 	buildFirebreak();
@@ -448,7 +448,7 @@ HRESULT CCWFGM_Asset::GetPolyLineCount(std::uint32_t* count) {
 
 HRESULT CCWFGM_Asset::GetAssetCount(const HSS_Time::WTime& time, std::uint32_t* count) {
 	if (!m_gridEngine) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 	buildFirebreak();
@@ -458,7 +458,7 @@ HRESULT CCWFGM_Asset::GetAssetCount(const HSS_Time::WTime& time, std::uint32_t* 
 
 HRESULT CCWFGM_Asset::GetAssetSetCount(const HSS_Time::WTime& time, std::uint32_t index, std::uint32_t* count) {
 	if (!m_gridEngine) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 	buildFirebreak();
@@ -519,7 +519,7 @@ HRESULT CCWFGM_Asset::GetPolyLineSize(std::uint32_t index, std::uint32_t* size) 
 
 HRESULT CCWFGM_Asset::GetAssetSize(std::uint32_t index, std::uint32_t sub_index, const HSS_Time::WTime& time, std::uint32_t* size) {
 	if (!m_gridEngine) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 	buildFirebreak();
@@ -627,7 +627,7 @@ HRESULT CCWFGM_Asset::GetPolyLine(std::uint32_t index, std::uint32_t* size, XY_P
 
 HRESULT CCWFGM_Asset::GetAsset(std::uint32_t index, std::uint32_t sub_index, const HSS_Time::WTime& time, std::uint32_t* size, XY_Poly* xy_pairs, std::uint16_t *type) {
 	if (!m_gridEngine) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 	buildFirebreak();
@@ -698,7 +698,7 @@ HRESULT CCWFGM_Asset::get_GridEngine( boost::intrusive_ptr<ICWFGM_GridEngine>* p
 		return E_POINTER;
 	*pVal = m_gridEngine;
 	if (!m_gridEngine) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 	return S_OK;
@@ -750,7 +750,7 @@ HRESULT CCWFGM_Asset::MT_Lock( bool exclusive,  std::uint16_t obtain) {
 
 HRESULT CCWFGM_Asset::Valid( const HSS_Time::WTime& /*start_time*/,  const HSS_Time::WTimeSpan& /*duration*/) {
 	if (!m_gridEngine) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 	return S_OK;
@@ -830,7 +830,7 @@ void CCWFGM_Asset::buildFirebreak() {
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine;
 	if (!(gridEngine = m_gridEngine)) {
-		weak_assert(0);
+		weak_assert(false);
 		return;
 	}
 
@@ -841,7 +841,7 @@ void CCWFGM_Asset::buildFirebreak() {
 	}
 	catch (std::bad_variant_access&)
 	{
-		weak_assert(0);
+		weak_assert(false);
 		return;
 	}
 
@@ -970,7 +970,7 @@ HRESULT CCWFGM_Asset::SetAttribute( std::uint16_t option,  const PolymorphicAttr
 	HRESULT hr;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine;
 	if (!gridEngine) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_GRID_UNINITIALIZED;
 	}
 
@@ -980,7 +980,7 @@ HRESULT CCWFGM_Asset::SetAttribute( std::uint16_t option,  const PolymorphicAttr
 			bval = std::get<bool>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			break;
 		}
 		old = m_flags;
@@ -998,7 +998,7 @@ HRESULT CCWFGM_Asset::SetAttribute( std::uint16_t option,  const PolymorphicAttr
 			str = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			break;
 		}
 		if (str.length()) {
@@ -1014,7 +1014,7 @@ HRESULT CCWFGM_Asset::SetAttribute( std::uint16_t option,  const PolymorphicAttr
 			str = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			break;
 		}
 		if (str.length()) {
@@ -1030,7 +1030,7 @@ HRESULT CCWFGM_Asset::SetAttribute( std::uint16_t option,  const PolymorphicAttr
 			str = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			break;
 		}
 		m_gisUID = str;
@@ -1044,7 +1044,7 @@ HRESULT CCWFGM_Asset::SetAttribute( std::uint16_t option,  const PolymorphicAttr
 			str = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			break;
 		}
 		m_gisPWD = str;

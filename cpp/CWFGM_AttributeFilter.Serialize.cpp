@@ -42,7 +42,7 @@ HRESULT CCWFGM_AttributeFilter::ExportAttributeGrid(const std::string &prj_file_
 	CRWThreadSemaphoreEngage engage(m_lock, SEM_FALSE);
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine;
-	if (!(gridEngine = m_gridEngine(nullptr)))					{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!(gridEngine = m_gridEngine(nullptr)))					{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	if (grid_file_name.length()==0)
 		return E_INVALIDARG;
@@ -138,7 +138,7 @@ HRESULT CCWFGM_AttributeFilter::ExportAttributeGrid(const std::string &prj_file_
 
 				}
 				else {
-					weak_assert(0);
+					weak_assert(false);
 					if (use_double)
 					{
 						*d_pointer = -9999;
@@ -166,7 +166,7 @@ HRESULT CCWFGM_AttributeFilter::ExportAttributeGrid(const std::string &prj_file_
 	}
 
 	GDALExporter exporter;
-	exporter.AddTag("TIFFTAG_SOFTWARE", "Prometheus");
+	exporter.AddTag("TIFFTAG_SOFTWARE", "W.I.S.E.");
 	exporter.AddTag("TIFFTAG_GDAL_NODATA", "-9999");
 	char mbstr[100];
 	std::time_t t = std::time(nullptr);
@@ -179,13 +179,13 @@ HRESULT CCWFGM_AttributeFilter::ExportAttributeGrid(const std::string &prj_file_
 
 		/*POLYMORPHIC CHECK*/
 		try { ref = std::get<std::string>(v); }
-		catch (std::bad_variant_access&) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+		catch (std::bad_variant_access&) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 		exporter.setProjection(ref.c_str());
 		exporter.setSize(m_xsize, m_ysize);
 
 		if ((m_xllcorner == -999999999.0) && (m_yllcorner == -999999999.0) && (m_resolution == -1.0)) {
-			weak_assert(0);
+			weak_assert(false);
 			fixResolution(nullptr, "");
 		}
 		exporter.setPixelResolution(m_resolution, m_resolution);
@@ -219,9 +219,9 @@ HRESULT CCWFGM_AttributeFilter::ImportAttributeGrid(const std::string & prj_file
 	if (!engaged)											return ERROR_SCENARIO_SIMULATION_RUNNING;
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine;
-	if (!(gridEngine = m_gridEngine(nullptr)))				{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!(gridEngine = m_gridEngine(nullptr)))				{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if ((m_optionType == VT_UI1) && (m_optionKey == (std::uint16_t)-1) && (!m_fuelMap))
-															{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+															{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	std::uint32_t size;
 
 	switch (m_optionType) {
@@ -259,7 +259,7 @@ HRESULT CCWFGM_AttributeFilter::ImportAttributeGrid(const std::string & prj_file
 		std::string csProject;
 
 		/*POLYMORPHIC CHECK*/
-		try { csProject = std::get<std::string>(v); } catch (std::bad_variant_access &) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+		try { csProject = std::get<std::string>(v); } catch (std::bad_variant_access &) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 		m_sourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(csProject.c_str());
 		if (m_sourceSRS) {
@@ -451,7 +451,7 @@ WISE::GridProto::CwfgmAttributeFilter *CCWFGM_AttributeFilter::serialize(const S
 	binary->set_datakey((::WISE::GridProto::CwfgmAttributeFilter_DataKey)m_optionKey);
 
 	if (m_xllcorner == -999999999.0 || m_yllcorner == -999999999.0) {
-		weak_assert(0);
+		weak_assert(false);
 		fixResolution(nullptr, "");
 	}
 
@@ -553,7 +553,7 @@ CCWFGM_AttributeFilter *CCWFGM_AttributeFilter::deserialize(const google::protob
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmAttributeFilter", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "gridEngine");
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmAttributeFilter: No grid engine";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmAttributeFilter: Incomplete initialization");
 	}
@@ -567,7 +567,7 @@ CCWFGM_AttributeFilter *CCWFGM_AttributeFilter::deserialize(const google::protob
 			/// </summary>
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmAttributeFilter", name, validation::error_level::SEVERE, validation::id::object_invalid, proto.GetDescriptor()->name());
-		weak_assert(0);
+		weak_assert(false);
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmAttributeFilter: Protobuf object invalid", ERROR_PROTOBUF_OBJECT_INVALID);
 	}
 	if ((filter->version() != 1) && (filter->version() != 2)) {
@@ -577,7 +577,7 @@ CCWFGM_AttributeFilter *CCWFGM_AttributeFilter::deserialize(const google::protob
 			/// </summary>
 			/// <type>user</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmAttributeFilter", name, validation::error_level::SEVERE, validation::id::version_mismatch, std::to_string(filter->version()));
-		weak_assert(0);
+		weak_assert(false);
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmAttributeFilter: Version is invalid", ERROR_PROTOBUF_OBJECT_VERSION_INVALID);
 	}
 
@@ -605,7 +605,7 @@ CCWFGM_AttributeFilter *CCWFGM_AttributeFilter::deserialize(const google::protob
 						/// <type>internal</type>
 						valid->add_child_validation("CWFGM", name, validation::error_level::SEVERE,
 							validation::id::out_of_memory, std::to_string(val.size()));
-					weak_assert(0);
+					weak_assert(false);
 					m_loadWarning = "Error: WISE.GridProto.CwfgmAttributeFilter: No more memory";
 					throw std::bad_alloc();
 				}
@@ -621,7 +621,7 @@ CCWFGM_AttributeFilter *CCWFGM_AttributeFilter::deserialize(const google::protob
 						/// <type>internal</type>
 						valid->add_child_validation("CWFGM", name, validation::error_level::SEVERE,
 							validation::id::out_of_memory, std::to_string(filter->binary().data().value().length()));
-					weak_assert(0);
+					weak_assert(false);
 					m_loadWarning = "Error: WISE.GridProto.CwfgmAttributeFilter: No more memory";
 					throw std::bad_alloc();
 				}
@@ -643,7 +643,7 @@ CCWFGM_AttributeFilter *CCWFGM_AttributeFilter::deserialize(const google::protob
 						/// <type>internal</type>
 						valid->add_child_validation("CWFGM", name, validation::error_level::SEVERE,
 							validation::id::out_of_memory, std::to_string(val.size()));
-					weak_assert(0);
+					weak_assert(false);
 					m_loadWarning = "Error: WISE.GridProto.CwfgmAttributeFilter: No more memory";
 					throw std::bad_alloc();
 				}
@@ -659,7 +659,7 @@ CCWFGM_AttributeFilter *CCWFGM_AttributeFilter::deserialize(const google::protob
 						/// <type>internal</type>
 						valid->add_child_validation("CWFGM", name, validation::error_level::SEVERE,
 							validation::id::out_of_memory, std::to_string(filter->binary().nodata().value().length() * sizeof(bool)));
-					weak_assert(0);
+					weak_assert(false);
 					m_loadWarning = "Error: WISE.GridProto.CwfgmAttributeFilter: No more memory";
 					throw std::bad_alloc();
 				}

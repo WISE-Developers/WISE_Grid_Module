@@ -286,7 +286,7 @@ HRESULT CCWFGM_Target::GetTargetCount(std::uint32_t *count) {
 
 
 HRESULT CCWFGM_Target::GetTargetSetCount(std::uint32_t index, std::uint32_t *count) {
-	if (!m_gridEngine)							{ weak_assert(0); return ERROR_VECTOR_UNINITIALIZED; }
+	if (!m_gridEngine)							{ weak_assert(false); return ERROR_VECTOR_UNINITIALIZED; }
 	if (!count)								return E_POINTER;
 
 	CRWThreadSemaphoreEngage engage(m_lock, FALSE);
@@ -354,7 +354,7 @@ HRESULT CCWFGM_Target::GetTargetSet(std::uint32_t index, std::uint32_t* size, XY
 HRESULT CCWFGM_Target::get_GridEngine( boost::intrusive_ptr<ICWFGM_GridEngine>* pVal) {
 	if (!pVal)								return E_POINTER;
 	*pVal = m_gridEngine;
-	if (!m_gridEngine)							{ weak_assert(0); return ERROR_VECTOR_UNINITIALIZED; }
+	if (!m_gridEngine)							{ weak_assert(false); return ERROR_VECTOR_UNINITIALIZED; }
 	return S_OK;
 }
 
@@ -470,7 +470,7 @@ HRESULT CCWFGM_Target::SetAttribute( std::uint16_t option,  const PolymorphicAtt
 	bool bval;
 	HRESULT hr;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine;
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	switch (option) {
 	case CWFGM_GRID_ATTRIBUTE_GIS_CANRESIZE:
@@ -478,7 +478,7 @@ HRESULT CCWFGM_Target::SetAttribute( std::uint16_t option,  const PolymorphicAtt
 			bval = std::get<bool>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			break;
 		}
 		old = m_flags;
@@ -496,7 +496,7 @@ HRESULT CCWFGM_Target::SetAttribute( std::uint16_t option,  const PolymorphicAtt
 			str = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			break;
 		}
 		if (str.length()) {
@@ -512,7 +512,7 @@ HRESULT CCWFGM_Target::SetAttribute( std::uint16_t option,  const PolymorphicAtt
 			str = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			break;
 		}
 		if (str.length()) {
@@ -528,7 +528,7 @@ HRESULT CCWFGM_Target::SetAttribute( std::uint16_t option,  const PolymorphicAtt
 			str = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			break;
 		}
 		m_gisUID = str;
@@ -542,7 +542,7 @@ HRESULT CCWFGM_Target::SetAttribute( std::uint16_t option,  const PolymorphicAtt
 			str = std::get<std::string>(var);
 		}
 		catch (std::bad_variant_access&) {
-			weak_assert(0);
+			weak_assert(false);
 			break;
 		}
 		m_gisPWD = str;
