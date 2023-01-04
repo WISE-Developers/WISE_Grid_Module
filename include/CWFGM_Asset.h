@@ -354,7 +354,7 @@ protected:
 	HRESULT getBreakSize(std::uint32_t index, std::uint32_t sub_index, const HSS_Time::WTime& time, std::uint32_t* count) const;
 	HRESULT getBreak(std::uint32_t index, std::uint32_t sub_index, const HSS_Time::WTime& time, std::uint32_t* size, XY_Poly* xy_pairs, std::uint16_t *type) const;
 
-	__INLINE void clearFirebreak()	{ m_assets.clear(); };
+	void clearFirebreak()	{ m_assets.clear(); };
 	void buildFirebreak();
 #endif
 };

@@ -228,7 +228,7 @@ GridData *CCWFGM_Grid::m_gridData(Layer *layerThread) {
 		GridData *gd;
 
 		/*POLYMORPHIC CHECK*/
-		try { gd = (GridData *)std::get<void *>(v); } catch (std::bad_variant_access &) { weak_assert(0); return &m_baseGrid; };
+		try { gd = (GridData *)std::get<void *>(v); } catch (std::bad_variant_access &) { weak_assert(false); return &m_baseGrid; };
 
 		if (gd)
 			return gd;
@@ -262,7 +262,7 @@ HRESULT CCWFGM_Grid::PutGridEngine(Layer *layerThread, ICWFGM_GridEngine *newVal
 			return S_OK;
 		}
 	}
-	if (!m_layerManager)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_layerManager)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	HRESULT hr;
 	if (newVal) {
@@ -283,7 +283,7 @@ HRESULT CCWFGM_Grid::PutGridEngine(Layer *layerThread, ICWFGM_GridEngine *newVal
 			}
 		}
 		catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			gd = nullptr;
 		}
 		hr = m_layerManager->PutGridEngine(layerThread, this, newVal);
@@ -315,7 +315,7 @@ HRESULT CCWFGM_Grid::PreCalculationEvent(Layer *layerThread, const HSS_Time::WTi
 										// if mode == 1, then it's a time step being initialized (and you're getting the bounding box of the fires at that state)
 	std::uint32_t *cnt;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread, &cnt);
-	if (!gridEngine.get())							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine.get())							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if ((mode & (~(1 << CWFGM_SCENARIO_OPTION_WEATHER_ALTERNATE_CACHE))) == 1) {
 		(*cnt)++;
 	}
@@ -335,7 +335,7 @@ HRESULT CCWFGM_Grid::PreCalculationEvent(Layer *layerThread, const HSS_Time::WTi
 HRESULT CCWFGM_Grid::PostCalculationEvent(Layer *layerThread, const HSS_Time::WTime &time, std::uint32_t mode, CalculationEventParms *parms) {
 	std::uint32_t *cnt;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread, &cnt);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if ((mode & (~(1 << CWFGM_SCENARIO_OPTION_WEATHER_ALTERNATE_CACHE))) == 1) {
 		(*cnt)--;
 	}
@@ -365,13 +365,13 @@ HRESULT CCWFGM_Grid::GetDimensions(Layer *layerThread, std::uint16_t *x_dim, std
 
 
 HRESULT CCWFGM_Grid::GetFuelData(Layer *layerThread, const XY_Point &pt, const HSS_Time::WTime &/*time*/, ICWFGM_Fuel **fuel, bool *fuel_valid, XY_Rectangle *cache_bbox) {
-	if (!m_fuelMap.get())						{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-	if (!(m_flags & CCWFGMGRID_VALID))			{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_fuelMap.get())						{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+	if (!(m_flags & CCWFGMGRID_VALID))			{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	GridData *gd = m_gridData(layerThread);
 	std::uint16_t x = gd->convertX(pt.x, cache_bbox);
 	std::uint16_t y = gd->convertY(pt.y, cache_bbox);
-	if (!gd->m_fuelArray)						{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gd->m_fuelArray)						{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (x >= gd->m_xsize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (y >= gd->m_ysize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (!fuel)									return E_POINTER;
@@ -399,13 +399,13 @@ HRESULT CCWFGM_Grid::GetFuelData(Layer *layerThread, const XY_Point &pt, const H
 
 
 HRESULT CCWFGM_Grid::GetFuelIndexData(Layer *layerThread, const XY_Point &pt, const HSS_Time::WTime &/*time*/, std::uint8_t *fuel_index, bool *fuel_valid, XY_Rectangle *cache_bbox) {
-	if (!m_fuelMap)								{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-	if (!(m_flags & CCWFGMGRID_VALID))			{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_fuelMap)								{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+	if (!(m_flags & CCWFGMGRID_VALID))			{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	GridData *gd = m_gridData(layerThread);
 	std::uint16_t x = gd->convertX(pt.x, cache_bbox);
 	std::uint16_t y = gd->convertY(pt.y, cache_bbox);
-	if (!gd->m_fuelArray)						{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gd->m_fuelArray)						{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (x >= gd->m_xsize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (y >= gd->m_ysize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (!fuel_index)							return E_POINTER;
@@ -422,7 +422,7 @@ HRESULT CCWFGM_Grid::GetFuelIndexData(Layer *layerThread, const XY_Point &pt, co
 
 #ifdef _DEBUG
 	if (gd->m_fuelArray[index] == (std::uint8_t)(-1)) {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_FUELS_FUEL_UNKNOWN;
 	}
 #endif
@@ -433,13 +433,13 @@ HRESULT CCWFGM_Grid::GetFuelIndexData(Layer *layerThread, const XY_Point &pt, co
 HRESULT CCWFGM_Grid::GetFuelDataArray(Layer *layerThread, const XY_Point &min_pt, const XY_Point &max_pt, double scale,
 	const HSS_Time::WTime & /*time*/, ICWFGM_Fuel_2d *fuel, bool_2d *fuel_valid) {
 
-	if (!m_fuelMap)									{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-	if (!(m_flags & CCWFGMGRID_VALID))				{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_fuelMap)									{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+	if (!(m_flags & CCWFGMGRID_VALID))				{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	GridData *gd = m_gridData(layerThread);
 	std::uint16_t x_min = gd->convertX(min_pt.x, nullptr), y_min = gd->convertY(min_pt.y, nullptr);
 	std::uint16_t x_max = gd->convertX(max_pt.x, nullptr), y_max = gd->convertY(max_pt.y, nullptr);
-	if (!gd->m_fuelArray)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gd->m_fuelArray)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (x_min >= gd->m_xsize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (y_min >= gd->m_ysize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (x_max >= gd->m_xsize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
@@ -521,7 +521,7 @@ HRESULT CCWFGM_Grid::GetFuelDataArray(Layer *layerThread, const XY_Point &min_pt
 
 #ifdef _DEBUG
 					if ((*fuel)[x2 - x_min][y2 - y_min]) {
-						weak_assert(0);
+						weak_assert(false);
 						continue;
 					}
 #endif
@@ -541,13 +541,13 @@ HRESULT CCWFGM_Grid::GetFuelDataArray(Layer *layerThread, const XY_Point &min_pt
 HRESULT CCWFGM_Grid::GetFuelIndexDataArray(Layer *layerThread, const XY_Point &min_pt, const XY_Point &max_pt, double scale,
     const HSS_Time::WTime & /*time*/, uint8_t_2d *fuel, bool_2d *fuel_valid) {
 
-	if (!m_fuelMap)									{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-	if (!(m_flags & CCWFGMGRID_VALID))				{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_fuelMap)									{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+	if (!(m_flags & CCWFGMGRID_VALID))				{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	GridData *gd = m_gridData(layerThread);
 	std::uint16_t x_min = gd->convertX(min_pt.x, nullptr), y_min = gd->convertY(min_pt.y, nullptr);
 	std::uint16_t x_max = gd->convertX(max_pt.x, nullptr), y_max = gd->convertY(max_pt.y, nullptr);
-	if (!gd->m_fuelArray)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gd->m_fuelArray)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (x_min >= gd->m_xsize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (y_min >= gd->m_ysize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (x_max >= gd->m_xsize)						return ERROR_GRID_LOCATION_OUT_OF_RANGE;
@@ -611,7 +611,7 @@ HRESULT CCWFGM_Grid::GetElevationData(Layer *layerThread, const XY_Point &pt, bo
 	GridData *gd = m_gridData(layerThread);
 	std::uint16_t x = gd->convertX(pt.x, bbox_cache);
 	std::uint16_t y = gd->convertY(pt.y, bbox_cache);
-	if (!(m_flags & CCWFGMGRID_VALID))				{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!(m_flags & CCWFGMGRID_VALID))				{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	if (x >= gd->m_xsize)							return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 	if (y >= gd->m_ysize)							return ERROR_GRID_LOCATION_OUT_OF_RANGE;
 
@@ -624,7 +624,7 @@ HRESULT CCWFGM_Grid::GetElevationData(Layer *layerThread, const XY_Point &pt, bo
 
 #ifdef _DEBUG
 		else if (gd->m_elevationArray[index] != -9999) {
-			weak_assert(0);
+			weak_assert(false);
 			*elevation = gd->m_elevationArray[index];
 			*elev_valid = grid::TerrainValue::SET;
 		}
@@ -802,7 +802,7 @@ HRESULT CCWFGM_Grid::GetWeatherData(Layer *layerThread, const XY_Point &pt, cons
 
 	if (interpolate_method & (CWFGM_GETEVENTTIME_QUERY_PRIMARY_WX_STREAM | CWFGM_GETEVENTTIME_QUERY_ANY_WX_STREAM)) {
 		boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-		if (!gridEngine.get())							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+		if (!gridEngine.get())							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 		return gridEngine->GetWeatherData(layerThread, pt, time, interpolate_method, wx, ifwi, dfwi, wx_valid, bbox_cache);
 	}
@@ -816,7 +816,7 @@ HRESULT CCWFGM_Grid::GetWeatherDataArray(Layer *layerThread, const XY_Point &min
 
 	if (interpolate_method & (CWFGM_GETEVENTTIME_QUERY_PRIMARY_WX_STREAM | CWFGM_GETEVENTTIME_QUERY_ANY_WX_STREAM)) {
 		boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-		if (!gridEngine.get())							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+		if (!gridEngine.get())							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 		return gridEngine->GetWeatherDataArray(layerThread, min_pt, max_pt, scale, time, interpolate_method, wx, ifwi, dfwi, wx_valid);
 	}
@@ -883,10 +883,10 @@ HRESULT CCWFGM_Grid::GetAttributeDataArray(Layer * /*layerThread*/, const XY_Poi
 HRESULT CCWFGM_Grid::IsFuelUsed(ICWFGM_Fuel *fuel) {
 	CRWThreadSemaphoreEngage engage(m_lock, SEM_FALSE);
 
-	if (!(m_flags & CCWFGMGRID_VALID))				{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-	if (!m_fuelMap)									{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!(m_flags & CCWFGMGRID_VALID))				{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_fuelMap)									{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	GridData *gd = m_gridData(nullptr);
-	if (!gd->m_fuelArray)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gd->m_fuelArray)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	std::uint8_t f = (std::uint8_t)-1;
 	long i, export_index, index = gd->m_xsize * gd->m_ysize;
@@ -909,7 +909,7 @@ HRESULT CCWFGM_Grid::get_FuelMap(CCWFGM_FuelMap **pVal) {
 	CRWThreadSemaphoreEngage engage(m_lock, SEM_FALSE);
 
 	*pVal = m_fuelMap.get();
-	if (!m_fuelMap)								{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_fuelMap)								{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	return S_OK;
 }
 
@@ -921,7 +921,7 @@ HRESULT CCWFGM_Grid::put_FuelMap(CCWFGM_FuelMap *newVal) {
 	CRWThreadSemaphoreEngage engage(m_lock, SEM_TRUE, &engaged, 1000000LL);
 	if (!engaged)								return ERROR_SCENARIO_SIMULATION_RUNNING;
 
-	if (m_fuelMap)								{ weak_assert(0); return ERROR_GRID_INITIALIZED; }
+	if (m_fuelMap)								{ weak_assert(false); return ERROR_GRID_INITIALIZED; }
 	boost::intrusive_ptr <CCWFGM_FuelMap> pFuelMap;
 	pFuelMap = dynamic_cast<CCWFGM_FuelMap *>(newVal);
 	HRESULT retval;
@@ -1408,24 +1408,24 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 	switch (option) {
 		case CWFGM_GRID_ATTRIBUTE_LATITUDE:		
 								if (FAILED(hr = VariantToDouble_(var, &value)))				break;
-								if (value < DEGREE_TO_RADIAN(-90.0))					{ weak_assert(0); return E_INVALIDARG; }
-								if (value > DEGREE_TO_RADIAN(90.0))					{ weak_assert(0); return E_INVALIDARG; }
+								if (value < DEGREE_TO_RADIAN(-90.0))					{ weak_assert(false); return E_INVALIDARG; }
+								if (value > DEGREE_TO_RADIAN(90.0))					{ weak_assert(false); return E_INVALIDARG; }
 								m_worldLocation.m_latitude(value);
 								m_bRequiresSave = true;
 								return S_OK;
 
 		case CWFGM_GRID_ATTRIBUTE_LONGITUDE:
 								if (FAILED(hr = VariantToDouble_(var, &value)))			break;
-								if (value < DEGREE_TO_RADIAN(-180.0))					{ weak_assert(0); return E_INVALIDARG; }
-								if (value > DEGREE_TO_RADIAN(180.0))					{ weak_assert(0); return E_INVALIDARG; }
+								if (value < DEGREE_TO_RADIAN(-180.0))					{ weak_assert(false); return E_INVALIDARG; }
+								if (value > DEGREE_TO_RADIAN(180.0))					{ weak_assert(false); return E_INVALIDARG; }
 								m_worldLocation.m_longitude(value);
 								m_bRequiresSave = true;
 								return S_OK;
 
 		case CWFGM_GRID_ATTRIBUTE_DEFAULT_ELEVATION:
 								if (FAILED(hr = VariantToDouble_(var, &value)))		break;
-								if (value < 0.0) if (value != -99.0)					{ weak_assert(0); return E_INVALIDARG; }
-								if (value > 7000.0)							{ weak_assert(0); return E_INVALIDARG; }
+								if (value < 0.0) if (value != -99.0)					{ weak_assert(false); return E_INVALIDARG; }
+								if (value > 7000.0)							{ weak_assert(false); return E_INVALIDARG; }
 								m_defaultElevation = value;
 								m_flags |= CCWFGMGRID_DEFAULT_ELEV_SET;
 								m_bRequiresSave = true;
@@ -1443,7 +1443,7 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 		case CWFGM_GRID_ATTRIBUTE_DEFAULT_FMC:
 								if (FAILED(hr = VariantToDouble_(var, &value)))								break;
 								if (value > 300.0)							return E_INVALIDARG;
-								if (value < 0.0)							{ weak_assert(0);  return E_INVALIDARG; }
+								if (value < 0.0)							{ weak_assert(false);  return E_INVALIDARG; }
 								m_defaultFMC = value;
 								m_bRequiresSave = true;
 								return S_OK;
@@ -1454,7 +1454,7 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								if (str.length()) {
@@ -1479,7 +1479,7 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 									bval = std::get<bool>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								old = m_flags;
@@ -1497,7 +1497,7 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								if (str.length()) {
@@ -1513,7 +1513,7 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								if (str.length()) {
@@ -1529,7 +1529,7 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								m_gisGridUID = str;
@@ -1543,7 +1543,7 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								m_gisGridPWD = str;
@@ -1556,11 +1556,11 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 									value = std::get<double>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
-								if (value < 100.0)									{ weak_assert(0); return E_INVALIDARG; }		// a 100m initial size is pretty small!
-								if (value > 100000.0)								{ weak_assert(0); return E_INVALIDARG; }		// a 100km initial size is pretty big!
+								if (value < 100.0)									{ weak_assert(false); return E_INVALIDARG; }		// a 100m initial size is pretty small!
+								if (value > 100000.0)								{ weak_assert(false); return E_INVALIDARG; }		// a 100km initial size is pretty big!
 								if (m_flags & CCWFGMGRID_VALID)
 									value = ceil(value / m_baseGrid.m_resolution) * m_baseGrid.m_resolution;
 								m_initialSize = value;
@@ -1572,11 +1572,11 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 									value = std::get<double>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
-								if (value < 100.0)									{ weak_assert(0); return E_INVALIDARG; }		// a 100m buffer size is pretty small!
-								if (value > 100000.0)								{ weak_assert(0); return E_INVALIDARG; }		// a 100km buffer size is pretty big!
+								if (value < 100.0)									{ weak_assert(false); return E_INVALIDARG; }		// a 100m buffer size is pretty small!
+								if (value > 100000.0)								{ weak_assert(false); return E_INVALIDARG; }		// a 100km buffer size is pretty big!
 								m_reactionSize = value;
 								m_bRequiresSave = true;
 								return S_OK;
@@ -1586,11 +1586,11 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 									value = std::get<double>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
-								if (value < 100.0)									{ weak_assert(0); return E_INVALIDARG; }		// a 100m grow size is pretty small!
-								if (value > 100000.0)								{ weak_assert(0); return E_INVALIDARG; }		// a 100km grow size is pretty big!
+								if (value < 100.0)									{ weak_assert(false); return E_INVALIDARG; }		// a 100m grow size is pretty small!
+								if (value > 100000.0)								{ weak_assert(false); return E_INVALIDARG; }		// a 100km grow size is pretty big!
 								if (m_flags & CCWFGMGRID_VALID)
 									value = ceil(value / m_baseGrid.m_resolution) * m_baseGrid.m_resolution;
 								m_reactionSize = value;
@@ -1598,7 +1598,7 @@ HRESULT CCWFGM_Grid::SetAttribute(std::uint16_t option, const PolymorphicAttribu
 								return S_OK;
 	}
 
-	weak_assert(0);
+	weak_assert(false);
 	return hr;
 }
 
@@ -1686,7 +1686,7 @@ HRESULT CCWFGM_Grid::GetAttribute(Layer * /*layerThread*/, std::uint16_t option,
 		case CWFGM_GRID_ATTRIBUTE_GROWTHSIZE:		*value = m_growSize; return S_OK;
 	}
 
-	weak_assert(0);
+	weak_assert(false);
 	return E_INVALIDARG;
 }
 
@@ -1701,10 +1701,10 @@ HRESULT CCWFGM_Grid::CreateGrid(std::uint16_t xsize, std::uint16_t ysize, const 
 	CRWThreadSemaphoreEngage engage(m_lock, SEM_TRUE, &engaged, 1000000LL);
 	if (!engaged)									return ERROR_SCENARIO_SIMULATION_RUNNING;
 
-	if (!m_fuelMap)									{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!m_fuelMap)									{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	GridData *gd = m_gridData(nullptr);
-	if (gd->m_xsize != (std::uint16_t)-1)			{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
-	if (gd->m_fuelArray)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (gd->m_xsize != (std::uint16_t)-1)			{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
+	if (gd->m_fuelArray)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	long internal_index, export_index;
 	ICWFGM_Fuel *fuel;

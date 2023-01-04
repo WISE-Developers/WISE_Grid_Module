@@ -85,7 +85,7 @@ HRESULT CCWFGM_VectorFilter::ImportPolylines(const std::string & file_path, cons
 
 		/*POLYMORPHIC CHECK*/
 		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			if (pd) {
 				std::uint32_t i = 0;
 				while (pd[i])
@@ -97,7 +97,7 @@ HRESULT CCWFGM_VectorFilter::ImportPolylines(const std::string & file_path, cons
 
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	} else {
-		weak_assert(0);
+		weak_assert(false);
 		if (pd) { std::uint32_t i = 0; while (pd[i]) free((APTR)pd[i++]); free(pd); } 
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
@@ -171,11 +171,11 @@ HRESULT CCWFGM_VectorFilter::ImportPolylinesWFS(const std::string & url, const s
 		std::string projection;
 
 		/*POLYMORPHIC CHECK*/
-		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	} else {
-		weak_assert(0);
+		weak_assert(false);
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 
@@ -235,11 +235,11 @@ HRESULT CCWFGM_VectorFilter::ExportPolylines(const std::string & driver_name, co
 		std::string projection;
 
 		/*POLYMORPHIC CHECK*/
-		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) { weak_assert(0); return ERROR_PROJECTION_UNKNOWN; };
+		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) { weak_assert(false); return ERROR_PROJECTION_UNKNOWN; };
 
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	} else {
-		weak_assert(0);
+		weak_assert(false);
 		if (oTargetSRS)
 			OSRDestroySpatialReference(oTargetSRS);
 		return ERROR_VECTOR_UNINITIALIZED;
@@ -311,7 +311,7 @@ CCWFGM_VectorFilter* CCWFGM_VectorFilter::deserialize(const google::protobuf::Me
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmVectorFilter", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "gridEngine");
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmVectorFilter: No grid engine";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmVectorFilter: Incomplete initialization");
 	}
@@ -327,7 +327,7 @@ CCWFGM_VectorFilter* CCWFGM_VectorFilter::deserialize(const google::protobuf::Me
 			/// </summary>
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmVectorFilter", name, validation::error_level::SEVERE, validation::id::object_invalid, proto.GetDescriptor()->name());
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmVectorFilter: Protobuf object invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmVectorFilter: Protobuf object invalid", ERROR_PROTOBUF_OBJECT_INVALID);
 	}
@@ -339,7 +339,7 @@ CCWFGM_VectorFilter* CCWFGM_VectorFilter::deserialize(const google::protobuf::Me
 			/// </summary>
 			/// <type>user</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmVectorFilter", name, validation::error_level::SEVERE, validation::id::version_mismatch, std::to_string(filter->version()));
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmVectorFilter: Version is invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmVectorFilter: Version is invalid", ERROR_PROTOBUF_OBJECT_VERSION_INVALID);
 	}
@@ -387,7 +387,7 @@ CCWFGM_VectorFilter* CCWFGM_VectorFilter::deserialize(const google::protobuf::Me
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmVectorFilter", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "projection");
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: CWISE.GridProto.CwfgmVectorFilter: Incomplete initialization";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmVectorFilter: Incomplete initialization");
 	}

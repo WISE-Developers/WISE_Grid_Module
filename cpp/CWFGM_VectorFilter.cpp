@@ -106,7 +106,7 @@ HRESULT CCWFGM_VectorFilter::fixResolution() {
 	PolymorphicAttribute var;
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine;
-	if (!(gridEngine = m_gridEngine)) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!(gridEngine = m_gridEngine)) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	/*POLYMORPHIC CHECK*/
 	try {
@@ -115,7 +115,7 @@ HRESULT CCWFGM_VectorFilter::fixResolution() {
 		if (FAILED(hr = gridEngine->GetAttribute(nullptr, CWFGM_GRID_ATTRIBUTE_YLLCORNER, &var))) return hr; gridYLL = std::get<double>(var);
 	} catch (std::bad_variant_access &) 
 	{ 
-		weak_assert(0); 
+		weak_assert(false); 
 		return ERROR_GRID_UNINITIALIZED; 
 	}
 
@@ -303,7 +303,7 @@ HRESULT CCWFGM_VectorFilter::GetPolyLineRange(std::uint32_t index, XY_Point* min
 
 
 HRESULT CCWFGM_VectorFilter::GetFireBreakRange(std::uint32_t index, const HSS_Time::WTime &time, XY_Point *min_pt,  XY_Point *max_pt) {
-	if (!m_gridEngine)							{ weak_assert(0); return ERROR_VECTOR_UNINITIALIZED; }
+	if (!m_gridEngine)							{ weak_assert(false); return ERROR_VECTOR_UNINITIALIZED; }
 	buildFirebreak();
 	return getBreakRange(index, time, &min_pt->x, &min_pt->y, &max_pt->x, &max_pt->y);
 }
@@ -432,14 +432,14 @@ HRESULT CCWFGM_VectorFilter::GetPolyLineCount(std::uint32_t *count) {
 
 
 HRESULT CCWFGM_VectorFilter::GetFireBreakCount(const HSS_Time::WTime &time, std::uint32_t *count) {
-	if (!m_gridEngine)							{ weak_assert(0); return ERROR_VECTOR_UNINITIALIZED; }
+	if (!m_gridEngine)							{ weak_assert(false); return ERROR_VECTOR_UNINITIALIZED; }
 	buildFirebreak();
 	return getBreakCount(time, count);
 }
 
 
 HRESULT CCWFGM_VectorFilter::GetFireBreakSetCount(const HSS_Time::WTime &time, std::uint32_t index, std::uint32_t *count) {
-	if (!m_gridEngine)							{ weak_assert(0); return ERROR_VECTOR_UNINITIALIZED; }
+	if (!m_gridEngine)							{ weak_assert(false); return ERROR_VECTOR_UNINITIALIZED; }
 	buildFirebreak();
 	return getBreakSetCount(time, index, count);
 }
@@ -492,7 +492,7 @@ HRESULT CCWFGM_VectorFilter::GetPolyLineSize(std::uint32_t index, std::uint32_t 
 
 
 HRESULT CCWFGM_VectorFilter::GetFireBreakSize(std::uint32_t index, std::uint32_t sub_index, const HSS_Time::WTime &time, std::uint32_t *size) {
-	if (!m_gridEngine)							{ weak_assert(0); return ERROR_VECTOR_UNINITIALIZED; }
+	if (!m_gridEngine)							{ weak_assert(false); return ERROR_VECTOR_UNINITIALIZED; }
 	buildFirebreak();
 	if (index == (std::uint32_t)-1)
 		return getBreakMaxSize(time, size);
@@ -596,7 +596,7 @@ HRESULT CCWFGM_VectorFilter::GetPolyLine(std::uint32_t index, std::uint32_t *siz
 
 
 HRESULT CCWFGM_VectorFilter::GetFireBreak(std::uint32_t index, std::uint32_t sub_index, const HSS_Time::WTime &time, std::uint32_t *size, XY_Poly *xy_pairs) {
-	if (!m_gridEngine)							{ weak_assert(0); return ERROR_VECTOR_UNINITIALIZED; }
+	if (!m_gridEngine)							{ weak_assert(false); return ERROR_VECTOR_UNINITIALIZED; }
 	buildFirebreak();
 	return getBreak(index, sub_index, time, size, xy_pairs);
 }
@@ -660,7 +660,7 @@ HRESULT CCWFGM_VectorFilter::getBreak(std::uint32_t index, std::uint32_t sub_ind
 HRESULT CCWFGM_VectorFilter::get_GridEngine( boost::intrusive_ptr<ICWFGM_GridEngine> *pVal) {
 	if (!pVal)								return E_POINTER;
 	*pVal = m_gridEngine;
-	if (!m_gridEngine)							{ weak_assert(0); return ERROR_VECTOR_UNINITIALIZED; }
+	if (!m_gridEngine)							{ weak_assert(false); return ERROR_VECTOR_UNINITIALIZED; }
 	return S_OK;
 }
 
@@ -706,7 +706,7 @@ HRESULT CCWFGM_VectorFilter::MT_Lock(bool exclusive, std::uint16_t obtain) {
 
 
 HRESULT CCWFGM_VectorFilter::Valid(const HSS_Time::WTime & /*start_time*/, const HSS_Time::WTimeSpan & /*duration*/) {
-	if (!m_gridEngine)							{ weak_assert(0); return ERROR_VECTOR_UNINITIALIZED; }
+	if (!m_gridEngine)							{ weak_assert(false); return ERROR_VECTOR_UNINITIALIZED; }
 	return S_OK;
 }						
 
@@ -878,7 +878,7 @@ HRESULT CCWFGM_VectorFilter::SetAttribute(std::uint16_t option, const Polymorphi
 	bool bval;
 	HRESULT hr;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine;
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	switch (option) {
 		case CWFGM_GRID_ATTRIBUTE_GIS_CANRESIZE:
@@ -886,7 +886,7 @@ HRESULT CCWFGM_VectorFilter::SetAttribute(std::uint16_t option, const Polymorphi
 									bval = std::get<bool>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								old = m_flags;
@@ -904,7 +904,7 @@ HRESULT CCWFGM_VectorFilter::SetAttribute(std::uint16_t option, const Polymorphi
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								if (str.length()) {
@@ -920,7 +920,7 @@ HRESULT CCWFGM_VectorFilter::SetAttribute(std::uint16_t option, const Polymorphi
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								if (str.length()) {
@@ -936,7 +936,7 @@ HRESULT CCWFGM_VectorFilter::SetAttribute(std::uint16_t option, const Polymorphi
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								m_gisUID = str;
@@ -950,7 +950,7 @@ HRESULT CCWFGM_VectorFilter::SetAttribute(std::uint16_t option, const Polymorphi
 									str = std::get<std::string>(var);
 								}
 								catch (std::bad_variant_access &) {
-									weak_assert(0);
+									weak_assert(false);
 									break;
 								}
 								m_gisPWD = str;

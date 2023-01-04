@@ -73,7 +73,7 @@ CCWFGM_ReplaceGridFilter *CCWFGM_ReplaceGridFilter::deserialize(const google::pr
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmReplaceGridFilter", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "gridEngine");
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmReplaceGridFilter: No grid engine";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmReplaceGridFilter: Incomplete initialization");
 	}
@@ -88,7 +88,7 @@ CCWFGM_ReplaceGridFilter *CCWFGM_ReplaceGridFilter::deserialize(const google::pr
 			/// </summary>
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmReplaceGridFilter", name, validation::error_level::SEVERE, validation::id::object_invalid, proto.GetDescriptor()->name());
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmReplaceGridFilter: Protobuf object invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmReplaceGridFilter: Protobuf object invalid", ERROR_PROTOBUF_OBJECT_INVALID);
 	}
@@ -100,7 +100,7 @@ CCWFGM_ReplaceGridFilter *CCWFGM_ReplaceGridFilter::deserialize(const google::pr
 			/// </summary>
 			/// <type>user</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmReplaceGridFilter", name, validation::error_level::SEVERE, validation::id::version_mismatch, std::to_string(filter->version()));
-		weak_assert(0);
+		weak_assert(false);
 		m_loadWarning = "Error: WISE.GridProto.CwfgmReplaceGridFilter: Version is invalid";
 		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmReplaceGridFilter: Version is invalid", ERROR_PROTOBUF_OBJECT_VERSION_INVALID);
 	}
@@ -115,7 +115,7 @@ CCWFGM_ReplaceGridFilter *CCWFGM_ReplaceGridFilter::deserialize(const google::pr
 			/// <type>internal</type>
 			valid->add_child_validation("WISE.GridProto.CwfgmReplaceGridFilter", name, validation::error_level::SEVERE,
 				validation::id::initialization_incomplete, "projection");
-		weak_assert(0);
+		weak_assert(false);
 		throw std::exception();
 	}
 

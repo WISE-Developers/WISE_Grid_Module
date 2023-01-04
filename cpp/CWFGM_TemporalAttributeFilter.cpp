@@ -110,7 +110,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::GetAttribute(unsigned short option, Poly
 
 HRESULT CCWFGM_TemporalAttributeFilter::MT_Lock(Layer *layerThread, bool exclusive, std::uint16_t obtain) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine) { weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine) { weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	HRESULT hr;
 	if (obtain == (std::uint16_t)-1) {
@@ -188,7 +188,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::PutCommonData(Layer* layerThread, ICWFGM
 HRESULT CCWFGM_TemporalAttributeFilter::Valid(Layer *layerThread, const HSS_Time::WTime &start_time, const HSS_Time::WTimeSpan &duration, std::uint32_t option, std::vector<uint16_t> *application_count) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
 
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	HRESULT hr = gridEngine->Valid(layerThread, start_time, duration, option, application_count);
 
 	if (m_rootEngine)
@@ -296,7 +296,7 @@ void CCWFGM_TemporalAttributeFilter::calculatedTimes(const DailyAttribute* day, 
 
 HRESULT CCWFGM_TemporalAttributeFilter::GetEventTime(Layer *layerThread, const XY_Point& pt, std::uint32_t flags, const HSS_Time::WTime &from_time,  HSS_Time::WTime *next_event, bool *event_valid) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 	HRESULT hr = gridEngine->GetEventTime(layerThread, pt, flags, from_time, next_event, event_valid);
 
 	if (flags & (CWFGM_GETEVENTTIME_FLAG_SEARCH_SUNRISE | CWFGM_GETEVENTTIME_FLAG_SEARCH_SUNSET)) {
@@ -352,7 +352,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::GetEventTime(Layer *layerThread, const X
 				}
 			}
 			else {
-				weak_assert(0);
+				weak_assert(false);
 			}
 			day = day->LN_Succ();
 		}
@@ -385,7 +385,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::GetEventTime(Layer *layerThread, const X
 HRESULT CCWFGM_TemporalAttributeFilter::GetAttributeData(Layer *layerThread, const XY_Point &pt,const WTime &time, const HSS_Time::WTimeSpan& timeSpan, std::uint16_t option,
 	std::uint64_t optionFlags, NumericVariant *attribute, grid::AttributeValue *attribute_valid, XY_Rectangle *cache_bbox) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	DailyAttribute *found = NULL;
 	SeasonalAttribute *sfound = NULL;
@@ -400,7 +400,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::GetAttributeData(Layer *layerThread, con
 			sfound = findSeasonOption(ws, option, false, true);
 		}
 		catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			return E_FAIL;
 		}
 	} else if ((option == CWFGM_GRID_ATTRIBUTE_BURNINGCONDITION_MIN_RH) ||
@@ -418,7 +418,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::GetAttributeData(Layer *layerThread, con
 			found = findOption(_time, false);
 		}
 		catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			return E_FAIL;
 		}
 	}
@@ -510,7 +510,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::GetAttributeData(Layer *layerThread, con
 HRESULT CCWFGM_TemporalAttributeFilter::GetAttributeDataArray(Layer * layerThread, const XY_Point &min_pt, const XY_Point &max_pt, double scale, const WTime &time, const HSS_Time::WTimeSpan& timeSpan,
     std::uint16_t option, std::uint64_t optionFlags, NumericVariant_2d *attribute, attribute_t_2d *attribute_valid) {
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine = m_gridEngine(layerThread);
-	if (!gridEngine)							{ weak_assert(0); return ERROR_GRID_UNINITIALIZED; }
+	if (!gridEngine)							{ weak_assert(false); return ERROR_GRID_UNINITIALIZED; }
 
 	return gridEngine->GetAttributeDataArray(layerThread, min_pt, max_pt, scale, time, timeSpan, option, optionFlags, attribute, attribute_valid);
 }
@@ -577,7 +577,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::GetOptionKey(unsigned short option, cons
 			sfound = findSeasonOption(ws, option, false, false);
 		}
 		catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			return E_FAIL;
 		}
 	} else if ((option == CWFGM_GRID_ATTRIBUTE_BURNINGCONDITION_MIN_RH) ||
@@ -598,7 +598,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::GetOptionKey(unsigned short option, cons
 			found = findOption(_time, false);
 		}
 		catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			return E_FAIL;
 		}
 	}
@@ -685,7 +685,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::SetOptionKey(unsigned short option, cons
 			sfound = findSeasonOption(ws, option, true, false);
 		}
 		catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			return E_FAIL;
 		}
 	} else if ((option == CWFGM_GRID_ATTRIBUTE_BURNINGCONDITION_MIN_RH) ||
@@ -706,7 +706,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::SetOptionKey(unsigned short option, cons
 			found = findOption(_time, true);
 		}
 		catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			return E_FAIL;
 		}
 	}
@@ -863,7 +863,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::ClearOptionKey(unsigned short option, co
 			sfound = findSeasonOption(ws, option, false, false);
 		}
 		catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			return E_FAIL;
 		}
 	} else if ((option == CWFGM_GRID_ATTRIBUTE_BURNINGCONDITION_MIN_RH) ||
@@ -882,7 +882,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::ClearOptionKey(unsigned short option, co
 			found = findOption(_time, false);
 		}
 		catch (std::bad_variant_access &) {
-			weak_assert(0);
+			weak_assert(false);
 			return E_FAIL;
 		}
 	}
@@ -998,14 +998,14 @@ DailyAttribute *CCWFGM_TemporalAttributeFilter::findOption(const WTime &_time, b
 	DailyAttribute *found = nullptr;
 
 	if ((m_timeManager->m_worldLocation.m_latitude() == 1000.0) && (m_rootEngine)) {
-		weak_assert(0);
+		weak_assert(false);
 		SetWorldLocation(m_rootEngine.get(), nullptr);
 	}
 
 	WTime time(0ULL, m_timeManager);
 	WTime _default((std::uint64_t)(-1), m_timeManager, false);
 	if (_time == _default) {
-		weak_assert(0);
+		weak_assert(false);
 		time.SetTime(_time);
 	} else {
 		WTime stime(_time);
@@ -1119,7 +1119,7 @@ HRESULT CCWFGM_TemporalAttributeFilter::TimeAtIndex(unsigned short option, /*[in
 #endif
 
 		} else {
-			weak_assert(0);
+			weak_assert(false);
 			WTime _default((std::uint64_t)(-1), m_timeManager, false);
 			*start_time = _default;
 		}

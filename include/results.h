@@ -71,8 +71,8 @@
 #define ERROR_SCENARIO_VECTORENGINE_UNKNOWN		((HRESULT)(12210 | ERROR_SEVERITY_WARNING))	// trying to remove a fire that wasn't added
 #define ERROR_SCENARIO_VECTORENGINE_KNOWN		((HRESULT)(12211 | ERROR_SEVERITY_WARNING))	// trying to remove a fire that wasn't added
 #define ERROR_SCENARIO_WEATHERGRID_UNKNOWN		((HRESULT)(12216 | ERROR_SEVERITY_WARNING))	// trying to remove a fire that wasn't added
-#define ERROR_SCENARIO_UNKNOWN				((HRESULT)(12214 | ERROR_SEVERITY_WARNING))	// only for PrometheusCOM
-#define ERROR_SCENARIO_KNOWN				((HRESULT)(12215 | ERROR_SEVERITY_WARNING))	// only for PrometheusCOMERR
+#define ERROR_SCENARIO_UNKNOWN				((HRESULT)(12214 | ERROR_SEVERITY_WARNING))		// trying to perform an operation on a scenario that we can't find
+#define ERROR_SCENARIO_KNOWN				((HRESULT)(12215 | ERROR_SEVERITY_WARNING))		// trying to perform a new operation on a scenario, but one already exists with that name
 #define ERROR_SCENARIO_ASSET_UNKNOWN				((HRESULT)(12219 | ERROR_SEVERITY_WARNING))	// trying to remove an asset that wasn't added
 #define ERROR_SCENARIO_ASSET_ALREADY_ADDED			((HRESULT)(12220 | ERROR_SEVERITY_WARNING))	// trying to add the same asset twice
 #define ERROR_SCENARIO_ASSET_GEOMETRY_UNKNOWN		((HRESULT)(12221 | ERROR_SEVERITY_WARNING))	// trying to remove an asset that wasn't added

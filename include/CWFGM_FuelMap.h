@@ -23,7 +23,6 @@
 #include "results.h"
 #include "semaphore.h"
 #include "valuecache_mt.h"
-//#include "ISerializeXMLStream.h"
 #include "ISerializeProto.h"
 #include "validation_object.h"
 #include "cwfgmFuelMap.pb.h"
