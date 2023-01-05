@@ -140,7 +140,7 @@ target_link_libraries(grid ${FOUND_GDAL_LIBRARY_PATH} ${Boost_LIBRARIES} ${FOUND
 target_link_libraries(grid ${FOUND_FWI_LIBRARY_PATH} ${FOUND_FUEL_LIBRARY_PATH})
 target_link_libraries(grid ${FOUND_WTIME_LIBRARY_PATH} ${FOUND_LOWLEVEL_LIBRARY_PATH} ${FOUND_MULTITHREAD_LIBRARY_PATH} ${FOUND_ERROR_CALC_LIBRARY_PATH} ${FOUND_MATH_LIBRARY_PATH} ${FOUND_GEOGRAPHY_LIBRARY_PATH})
 if (MSVC)
-target_link_libraries(grid -L${LOCAL_LIBRARY_DIR})
+target_link_directories(grid PUBLIC ${LOCAL_LIBRARY_DIR})
 else ()
 target_link_libraries(grid -lstdc++fs)
 endif (MSVC)
