@@ -41,26 +41,14 @@
 #include "XYPoly.h"
 
 
-HRESULT CCWFGM_Asset::ImportPolylines(const std::string& file_path, const std::vector<std::string>* permissible_drivers) {
-	if (!file_path.length())
+HRESULT CCWFGM_Asset::ImportPolylines(const std::filesystem::path& file_path, const std::vector<std::string_view>& permissible_drivers) {
+	if (file_path.empty())
 		return E_INVALIDARG;
 
 	bool engaged;
 	CRWThreadSemaphoreEngage engage(m_lock, SEM_TRUE, &engaged, 1000000LL);
 	if (!engaged)
 		return ERROR_SCENARIO_SIMULATION_RUNNING;
-
-	const char** pd;
-	if (permissible_drivers && permissible_drivers->size() > 0) {
-		if (pd = (const char**)malloc(sizeof(char*) * (size_t)(permissible_drivers->size() + 1))) {
-			std::uint32_t i;
-			for (i = 0; i < (std::uint32_t)permissible_drivers->size(); i++) {
-				pd[i] = strdup((*permissible_drivers)[i].c_str());
-			}
-			pd[i] = nullptr;
-		}
-	}
-	else pd = nullptr;
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine;
 	HRESULT hr;
@@ -71,29 +59,16 @@ HRESULT CCWFGM_Asset::ImportPolylines(const std::string& file_path, const std::v
 	CSemaphoreEngage lock(GDALClient::GDALClient::getGDALMutex(), TRUE);
 
 	if ((gridEngine = m_gridEngine) != nullptr) {
-		if (FAILED(hr = gridEngine->GetDimensions(0, &xdim, &ydim))) { if (pd) { std::uint32_t i = 0; while (pd[i]) free((APTR)pd[i++]); free(pd); } return hr; }
+		if (FAILED(hr = gridEngine->GetDimensions(0, &xdim, &ydim))) { return hr; }
 
 		PolymorphicAttribute var;
-		if (FAILED(hr = gridEngine->GetAttribute(0, CWFGM_GRID_ATTRIBUTE_PLOTRESOLUTION, &var)))	{
-			if (pd) {
-				std::uint32_t i = 0;
-				while (pd[i])
-					free((APTR)pd[i++]);
-				free(pd);
-			}
+		if (FAILED(hr = gridEngine->GetAttribute(0, CWFGM_GRID_ATTRIBUTE_PLOTRESOLUTION, &var)))
 			return hr;
-		}
 		VariantToDouble_(var, &gridResolution);
 
-		if (FAILED(hr = gridEngine->GetAttribute(0, CWFGM_GRID_ATTRIBUTE_SPATIALREFERENCE, &var))) {
-			if (pd) {
-				std::uint32_t i = 0;
-				while (pd[i])
-					free((APTR)pd[i++]);
-				free(pd);
-			}
+		if (FAILED(hr = gridEngine->GetAttribute(0, CWFGM_GRID_ATTRIBUTE_SPATIALREFERENCE, &var)))
 			return hr;
-		}
+
 		std::string projection;
 
 		/*POLYMORPHIC CHECK*/
@@ -102,12 +77,6 @@ HRESULT CCWFGM_Asset::ImportPolylines(const std::string& file_path, const std::v
 		}
 		catch (std::bad_variant_access&) { 
 			weak_assert(false); 
-			if (pd) {
-				std::uint32_t i = 0;
-				while (pd[i])
-					free((APTR)pd[i++]);
-				free(pd);
-			}
 			return ERROR_PROJECTION_UNKNOWN;
 		}
 
@@ -115,19 +84,13 @@ HRESULT CCWFGM_Asset::ImportPolylines(const std::string& file_path, const std::v
 	}
 	else {
 		weak_assert(false);
-		if (pd) {
-			std::uint32_t i = 0;
-			while (pd[i])
-				free((APTR)pd[i++]);
-			free(pd);
-		}
 		return ERROR_VECTOR_UNINITIALIZED;
 	}
 
 	XY_PolyLLSetAttributes set;
 	set.SetCacheScale(gridResolution);
 
-	if (SUCCEEDED(hr = set.ImportPoly(pd, file_path.c_str(), oSourceSRS, nullptr, nullptr, nullptr, true))) {
+	if (SUCCEEDED(hr = set.ImportPoly(permissible_drivers, file_path, oSourceSRS, nullptr, nullptr, nullptr, true))) {
 		m_attributeNames.clear();
 
 		RefNode<XY_PolyType>* node;
@@ -152,12 +115,6 @@ HRESULT CCWFGM_Asset::ImportPolylines(const std::string& file_path, const std::v
 	}
 	if (oSourceSRS)
 		OSRDestroySpatialReference(oSourceSRS);
-	if (pd) {
-		std::uint32_t i = 0;
-		while (pd[i])
-			free((APTR)pd[i++]);
-		free(pd);
-	}
 	return hr;
 }
 
@@ -229,7 +186,8 @@ HRESULT CCWFGM_Asset::ImportPolylinesWFS(const std::string& url, const std::stri
 	layers.push_back(csLayer);
 	XY_PolyLLSet pset;
 	std::string URI = prepareUri(csURL);
-	if (SUCCEEDED(hr = set.ImportPoly(NULL, URI.c_str(), oSourceSRS, NULL, &layers))) {
+	const std::vector<std::string_view> drivers;
+	if (SUCCEEDED(hr = set.ImportPoly(drivers, URI.c_str(), oSourceSRS, NULL, &layers))) {
 		RefNode<XY_PolyType>* node;
 		while ((node = m_polyList.RemHead()) != NULL) {
 			delete node->LN_Ptr();
@@ -257,11 +215,9 @@ HRESULT CCWFGM_Asset::ImportPolylinesWFS(const std::string& url, const std::stri
 }
 
 
-HRESULT CCWFGM_Asset::ExportPolylines(const std::string& driver_name,  const std::string& bprojection, const std::string& file_path) {
-	if ((!driver_name.length()) || (!file_path.length()))
+HRESULT CCWFGM_Asset::ExportPolylines(std::string_view driver_name, const std::string& bprojection, const std::filesystem::path& file_path) {
+	if ((!driver_name.length()) || (file_path.empty()))
 		return E_INVALIDARG;
-
-	std::string csPath(file_path), csDriverName(driver_name), csProjection(bprojection);
 
 	if (!m_polyList.GetCount())
 		return E_FAIL;
@@ -272,7 +228,7 @@ HRESULT CCWFGM_Asset::ExportPolylines(const std::string& driver_name,  const std
 	double gridResolution;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine;
 	OGRSpatialReferenceH oSourceSRS = NULL;
-	OGRSpatialReferenceH oTargetSRS = CCoordinateConverter::CreateSpatialReferenceFromStr(csProjection.c_str());
+	OGRSpatialReferenceH oTargetSRS = CCoordinateConverter::CreateSpatialReferenceFromStr(bprojection.c_str());
 
 	if ((gridEngine = m_gridEngine) != NULL) {
 		PolymorphicAttribute var;
@@ -319,7 +275,7 @@ HRESULT CCWFGM_Asset::ExportPolylines(const std::string& driver_name,  const std
 	}
 
 	set.SetCacheScale(gridResolution);
-	hr = set.ExportPoly(csDriverName.c_str(), csPath.c_str(), oSourceSRS, oTargetSRS);
+	hr = set.ExportPoly(driver_name, file_path, oSourceSRS, oTargetSRS);
 	if (oSourceSRS)
 		OSRDestroySpatialReference(oSourceSRS);
 	if (oTargetSRS)

@@ -87,7 +87,7 @@ public:
 		\retval	ERROR_HANDLE_DISK_FULL	Disk full.
 		\retval	ERROR_FILE_EXISTS	File already exists.
 	*/
-	virtual NO_THROW HRESULT ImportPolylines(const std::string & file_path, const std::vector<std::string> *permissible_drivers);
+	virtual NO_THROW HRESULT ImportPolylines(const std::filesystem::path & file_path, const std::vector<std::string_view> &permissible_drivers);
 	/**
 		This method imports polylines from the specified WFS, looking in the identified layer.  Imported data is automatically reprojected into the grid projection during import.
 		\param	url		Identifies the WFS provider.
@@ -116,7 +116,7 @@ public:
 		\retval	ERROR_SCENARIO_SIMULATION_RUNNING	Unable to continue due to running simulation.
 		\retval ERROR_FIREBREAK_NOT_FOUND	Unable to find firebreak.	
 	*/
-	virtual NO_THROW HRESULT ExportPolylines(const std::string & driver_name, const std::string & projection, const std::string & file_path);
+	virtual NO_THROW HRESULT ExportPolylines(std::string_view driver_name, const std::string & projection, const std::filesystem::path & file_path);
 	/**
 		This method exports polylines to the specified WFS, to the identified layer.  Exported data is in the grid's projection.
 		\param	url		Identifies the WFS provider.
