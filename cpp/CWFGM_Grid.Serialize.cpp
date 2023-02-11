@@ -1218,7 +1218,7 @@ CCWFGM_Grid *CCWFGM_Grid::deserialize(const google::protobuf::Message& proto, st
 						/// Prometheus is unable to handle the projection of the specified fuelmap.
 						/// </summary>
 						/// <type>user</type>
-						m_loadWarning += "  Prometheus is unable to handle the projection of the specified fuelmap.";
+						m_loadWarning += "  W.I.S.E. is unable to handle the projection of the specified fuelmap.";
 						break;
 					}
 					throw ISerializeProto::DeserializeError(m_loadWarning, hr);
@@ -1226,13 +1226,15 @@ CCWFGM_Grid *CCWFGM_Grid::deserialize(const google::protobuf::Message& proto, st
 				size = m_baseGrid.m_xsize * m_baseGrid.m_ysize;
 			}
 			else {
-				myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "fuelmap.file", validation::error_level::SEVERE,
-					validation::id::missing_fuel_grid, fuelmap.filename().value());
+				if (myValid)
+					myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "fuelmap.file", validation::error_level::SEVERE,
+						validation::id::missing_fuel_grid, fuelmap.filename().value());
 			}
 		}
 		else {
-			myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "fuelmap.file", validation::error_level::SEVERE,
-				validation::id::missing_fuel_grid, fuelmap.filename().value());
+			if (myValid)
+				myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "fuelmap.file", validation::error_level::SEVERE,
+					validation::id::missing_fuel_grid, fuelmap.filename().value());
 		}
 		if (fuelmap.has_header())
 			m_header = fuelmap.header().value();
@@ -1365,21 +1367,22 @@ CCWFGM_Grid *CCWFGM_Grid::deserialize(const google::protobuf::Message& proto, st
 				calcWarnings(calc_bits);
 			}
 			else {
-				myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "elevation.file", validation::error_level::SEVERE,
-					validation::id::missing_file, grid->elevation().filename().value());
+				if (myValid)
+					myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "elevation.file", validation::error_level::SEVERE,
+						validation::id::missing_file, grid->elevation().filename().value());
 			}
 		}
 	}
 
-	if ((m_baseGrid.m_xsize == (std::uint16_t) - 1) || (m_baseGrid.m_ysize == (std::uint16_t) - 1)) {
+	if ((m_baseGrid.m_xsize == (std::uint16_t)-1) || (m_baseGrid.m_ysize == (std::uint16_t)-1)) {
 		if (myValid)
 			/// <summary>
 			/// The grid size has not been specified and was not able to be loaded from the imported grids.
 			/// </summary>
 			/// <type>user</type>
 			myValid->add_child_validation("WISE.GridProto.CwfgmGrid", "grid", validation::error_level::SEVERE, "Grid.Size:Invalid", "unset");
-		m_loadWarning = "Error: WISE.GridProto.CwfgmGrid: No grid size has been specified";
-		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmGrid: No grid size has been specified");
+		m_loadWarning = "Error: WISE.GridProto.CwfgmGrid: No grid size has been specified and/or unable to load grids to import.";
+		throw ISerializeProto::DeserializeError("WISE.GridProto.CwfgmGrid: No grid size has been specified and/or unable to load grids to import.");
 	}
 
 	if (m_baseGrid.m_elevationArray) {
