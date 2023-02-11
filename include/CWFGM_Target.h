@@ -80,9 +80,9 @@ public:
 		\retval ERROR_SEVERITY_WARNING	Severity error warning
 	*/
 	virtual NO_THROW HRESULT Clone(boost::intrusive_ptr<ICWFGM_CommonBase>* newObject) const override;
-	virtual NO_THROW HRESULT ImportPointSet(const std::string& file_path, const std::vector<std::string>* permissible_drivers);
+	virtual NO_THROW HRESULT ImportPointSet(const std::filesystem::path& file_path, const std::vector<std::string_view>& permissible_drivers);
 	virtual NO_THROW HRESULT ImportPointSetWFS(const std::string& url, const std::string& layer, const std::string& username, const std::string& password);
-	virtual NO_THROW HRESULT ExportPointSet(const std::string& driver_name, const std::string& projection, const std::string& file_path);
+	virtual NO_THROW HRESULT ExportPointSet(std::string_view driver_name, const std::string& projection, const std::filesystem::path& file_path);
 	virtual NO_THROW HRESULT ExportPointSetWFS(const std::string& url, const std::string& layer, const std::string& username, const std::string& password);
 	virtual NO_THROW HRESULT AddPointSet(const XY_PolyConst& xy_pairs, std::uint32_t* index);
 	virtual NO_THROW HRESULT SetPointSet(std::uint32_t index, const XY_PolyConst& xy_pairs);

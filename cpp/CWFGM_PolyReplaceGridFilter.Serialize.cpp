@@ -38,26 +38,14 @@
 #endif
 
 
-HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygons(const std::string & file_path, const std::vector<std::string> *permissible_drivers) {
-	if (!file_path.length())
+HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygons(const std::filesystem::path & file_path, const std::vector<std::string_view> &permissible_drivers) {
+	if (file_path.empty())
 		return E_INVALIDARG;
-
-	const char **pd;
-	if (permissible_drivers && permissible_drivers->size() > 0) {
-		if (pd = (const char **)malloc(sizeof(char *) * (size_t)(permissible_drivers->size() + 1))) {
-			std::uint32_t i;
-			for (i = 0; i < (std::uint32_t)permissible_drivers->size(); i++) {
-				pd[i] = strdup((*permissible_drivers)[i].c_str());
-			}
-			pd[i] = nullptr;
-		}
-	}
-	else pd = nullptr;
 
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine;
 	HRESULT hr;
 	std::uint16_t xdim, ydim;
-	OGRSpatialReferenceH oSourceSRS = NULL;
+	OGRSpatialReferenceH oSourceSRS = nullptr;
 	CSemaphoreEngage lock(GDALClient::GDALClient::getGDALMutex(), TRUE);
 
 	if ((m_xllcorner == -999999999.0) && (m_yllcorner == -999999999.0) && (m_resolution == -1.0)) {
@@ -66,16 +54,10 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygons(const std::string & file_pa
 	}
 
 	if (gridEngine = m_gridEngine(nullptr)) {
-		if (FAILED(hr = gridEngine->GetDimensions(0, &xdim, &ydim)))					{ if (pd) { std::uint32_t i = 0; while (pd[i]) free((APTR)pd[i++]); free(pd); } return hr; }
+		if (FAILED(hr = gridEngine->GetDimensions(0, &xdim, &ydim)))					{ return hr; }
 
 		PolymorphicAttribute var;
 		if (FAILED(hr = gridEngine->GetAttribute(0, CWFGM_GRID_ATTRIBUTE_SPATIALREFERENCE, &var)))	{ 
-			if (pd) { 
-				std::uint32_t i = 0; 
-				while (pd[i]) 
-					free((APTR)pd[i++]); 
-				free(pd); 
-			} 
 			return hr; 
 		}
 
@@ -84,26 +66,20 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygons(const std::string & file_pa
 		/*POLYMORPHIC CHECK*/
 		try { projection = std::get<std::string>(var); } catch (std::bad_variant_access &) {
 			weak_assert(false);
-			if (pd) {
-				std::uint32_t i = 0;
-				while (pd[i])
-					free((APTR)pd[i++]);
-				free(pd);
-			} return ERROR_PROJECTION_UNKNOWN;
+			return ERROR_PROJECTION_UNKNOWN;
 		}
 
 		oSourceSRS = CCoordinateConverter::CreateSpatialReferenceFromWkt(projection.c_str());
 	}
 	else {
 		weak_assert(false);
-		if (pd) { std::uint32_t i = 0; while (pd[i]) free((APTR)pd[i++]); free(pd); }
 		return ERROR_GRID_UNINITIALIZED;
 	}
 
 	XY_PolyLLSet set;
 	set.SetCacheScale(m_resolution);
 
-	if (SUCCEEDED(hr = set.ImportPoly(pd, file_path.c_str(), oSourceSRS))) {
+	if (SUCCEEDED(hr = set.ImportPoly(permissible_drivers, file_path, oSourceSRS))) {
 
 		m_polySet.RemoveAllPolys();
 		XY_PolyLL *p;
@@ -113,7 +89,6 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygons(const std::string & file_pa
 	}
 	if (oSourceSRS)
 		OSRDestroySpatialReference(oSourceSRS);
-	if (pd) { std::uint32_t i = 0; while (pd[i]) free((APTR)pd[i++]); free(pd); } 
 	return hr;
 }
 
@@ -172,7 +147,8 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygonsWFS( const std::string & url
 	layers.push_back(csLayer);
 	XY_PolyLLSet pset;
 	std::string URI = prepareUri(csURL);
-	if (SUCCEEDED(hr = set.ImportPoly(NULL, URI.c_str(), oSourceSRS, NULL, &layers))) {
+	const std::vector<std::string_view> drivers;
+	if (SUCCEEDED(hr = set.ImportPoly(drivers, URI.c_str(), oSourceSRS, NULL, &layers))) {
 
 		m_polySet.RemoveAllPolys();
 		XY_PolyLL *p;
@@ -192,10 +168,9 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ImportPolygonsWFS( const std::string & url
 }
 
 
-HRESULT CCWFGM_PolyReplaceGridFilter::ExportPolygons(const std::string & driver_name,  const std::string & bprojection, const std::string & file_path) {
-	if ((!driver_name.length()) || (!file_path.length()))
+HRESULT CCWFGM_PolyReplaceGridFilter::ExportPolygons(std::string_view driver_name,  const std::string & bprojection, const std::filesystem::path & file_path) {
+	if ((!driver_name.length()) || (file_path.empty()))
 		return E_INVALIDARG;
-	std::string csPath(file_path), csDriverName(driver_name), csProjection(bprojection);
 
 	if (!m_polySet.NumPolys())
 		return E_FAIL;
@@ -205,7 +180,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ExportPolygons(const std::string & driver_
 	HRESULT hr;
 	boost::intrusive_ptr<ICWFGM_GridEngine> gridEngine;
 	OGRSpatialReferenceH oSourceSRS = NULL;
-	OGRSpatialReferenceH oTargetSRS = CCoordinateConverter::CreateSpatialReferenceFromStr(csProjection.c_str());
+	OGRSpatialReferenceH oTargetSRS = CCoordinateConverter::CreateSpatialReferenceFromStr(bprojection.c_str());
 
 	if ((m_xllcorner == -999999999.0) && (m_yllcorner == -999999999.0) && (m_resolution == -1.0)) {
 		weak_assert(false);
@@ -240,7 +215,7 @@ HRESULT CCWFGM_PolyReplaceGridFilter::ExportPolygons(const std::string & driver_
 
 	set.SetCacheScale(m_resolution);
 
-	hr = set.ExportPoly(csDriverName.c_str(), csPath.c_str(), oSourceSRS, oTargetSRS);
+	hr = set.ExportPoly(driver_name, file_path, oSourceSRS, oTargetSRS);
 	if (oSourceSRS)
 		OSRDestroySpatialReference(oSourceSRS);
 	if (oTargetSRS)

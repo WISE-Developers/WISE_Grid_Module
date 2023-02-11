@@ -99,7 +99,7 @@ public:
 		\retval	ERROR_HANDLE_DISK_FULL	Disk full.
 		\retval	ERROR_FILE_EXISTS	File already exists.
 	*/
-	virtual NO_THROW HRESULT ImportPolylines(const std::string & file_path, const std::vector<std::string>* permissible_drivers);
+	virtual NO_THROW HRESULT ImportPolylines(const std::filesystem::path & file_path, const std::vector<std::string_view>& permissible_drivers);
 	virtual NO_THROW HRESULT ImportPolylinesWFS(const std::string& url, const std::string& layer, const std::string& username, const std::string& password);
 	/**
 		This method exports polylines / polygons to the specified file.  The projection file is optionally created, and will be the grid's projection.  Driver names are defined by GDAL/OGR, plus "ARCInfo Generate".
@@ -114,7 +114,7 @@ public:
 		\retval	ERROR_SCENARIO_SIMULATION_RUNNING	Unable to continue due to running simulation.
 		\retval ERROR_FIREBREAK_NOT_FOUND	Unable to find firebreak.	
 	*/
-	virtual NO_THROW HRESULT ExportPolylines(const std::string& driver_name, const std::string& projection, const std::string& file_path);
+	virtual NO_THROW HRESULT ExportPolylines(std::string_view driver_name, const std::string& projection, const std::filesystem::path& file_path);
 	virtual NO_THROW HRESULT ExportPolylinesWFS(const std::string& url, const std::string& layer, const std::string& username, const std::string& password);
 	/**
 		This method adds a polyline / polygon defining an area to apply the vector filter.  A vector filter can contain many polylines and/or polygons, and polygons can be overlapping.
