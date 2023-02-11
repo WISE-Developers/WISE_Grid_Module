@@ -21,7 +21,6 @@
 #include "WTime.h"
 #include "semaphore.h"
 #include "results.h"
-#include "RLLEA.H"
 #include <map>
 #include "ICWFGM_GridEngine.h"
 #include "CWFGM_FuelMap.h"
