@@ -1218,7 +1218,7 @@ CCWFGM_Grid *CCWFGM_Grid::deserialize(const google::protobuf::Message& proto, st
 						/// Prometheus is unable to handle the projection of the specified fuelmap.
 						/// </summary>
 						/// <type>user</type>
-						m_loadWarning += "  Prometheus is unable to handle the projection of the specified fuelmap.";
+						m_loadWarning += "  W.I.S.E. is unable to handle the projection of the specified fuelmap.";
 						break;
 					}
 					throw ISerializeProto::DeserializeError(m_loadWarning, hr);
