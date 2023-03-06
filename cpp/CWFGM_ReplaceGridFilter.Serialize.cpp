@@ -1,5 +1,5 @@
 /**
- * WISE_Grid_Module: CWFGM_ReplaceGridFilter.h
+ * WISE_Grid_Module: CWFGM_ReplaceGridFilter.cpp
  * Copyright (C) 2023  WISE
  * 
  * This program is free software: you can redistribute it and/or modify

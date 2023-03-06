@@ -1,5 +1,5 @@
 /**
- * WISE_Grid_Module: CWFGM_PolyReplaceGridFilter.Serialize.h
+ * WISE_Grid_Module: CWFGM_PolyReplaceGridFilter.Serialize.cpp
  * Copyright (C) 2023  WISE
  * 
  * This program is free software: you can redistribute it and/or modify
