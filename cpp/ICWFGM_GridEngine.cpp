@@ -1,5 +1,5 @@
 /**
- * WISE_Grid_Module: ICWFGM_GridEngine.h
+ * WISE_Grid_Module: ICWFGM_GridEngine.cpp
  * Copyright (C) 2023  WISE
  * 
  * This program is free software: you can redistribute it and/or modify
